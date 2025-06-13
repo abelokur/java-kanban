@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -14,8 +12,6 @@ public class Main {
 
 
         Epic epic = new Epic("11", "22");
-        //System.out.println(epic.getName());
-        //System.out.println(epic.getId());
         System.out.println(epic);
 
         System.out.println("---------");
@@ -26,7 +22,6 @@ public class Main {
 
         System.out.println("/////////");
         taskManager.createEpics(epic);
-        //System.out.println(taskManager.getEpics());
         System.out.println("/////////");
         System.out.println(taskManager);
 
@@ -37,11 +32,6 @@ public class Main {
 
         System.out.println("///////////////////");
         System.out.println(taskManager.getAllSubtasks(epic));
-
-        System.out.println("11111111111111111");
-        //System.out.println(taskManager.getEpics());
-        System.out.println("22222222222222222");
-        //System.out.println(taskManager.getSubtasks());
 
         System.out.println("3333333333333333333333333");
         Epic epic1 = new Epic("111111111", "2222222222");

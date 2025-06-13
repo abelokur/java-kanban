@@ -39,8 +39,10 @@ public class Epic extends Task{
             switch (objSubTask.status) {
                 case NEW :
                     statusNew++;
+                    break;
                 case DONE :
                     statusDone++;
+                    break;
             }
         }
 
