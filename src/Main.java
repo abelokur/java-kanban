@@ -18,7 +18,7 @@ public class Main {
         epic.addSubTask(new Subtask("1", "1"));
         epic.addSubTask(new Subtask("2", "2"));
         epic.addSubTask(new Subtask("3", "3"));
-        System.out.println(epic); // будет 3.а.Получение списка всех подзадач определённого эпика.
+        System.out.println(epic);
 
         System.out.println("/////////");
         taskManager.createEpics(epic);
