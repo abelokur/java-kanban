@@ -1,16 +1,30 @@
+package ru.yandex.javacourse.model;
+
 import java.util.HashMap;
 
-public class Epic extends Task{
+public class Epic extends Task {
+    private HashMap<Integer, Subtask> subTaskList  = new HashMap<>();
 
-    HashMap<Integer, Subtask> subTaskList  = new HashMap<>();
     public Epic(String name, String description) {
         super(name, description);
     }
 
     public void addSubTask(Subtask newSubtask) {
         subTaskList.put(newSubtask.getId(), newSubtask);
-        newSubtask.epic = this;
+        newSubtask.setEpic(this);
         this.setStatus();
+    }
+
+    public void removeSubTask(int id) {
+        subTaskList.remove(id);
+    }
+
+    public HashMap<Integer, Subtask> getSubTaskList() {
+        return new HashMap<Integer, Subtask>(subTaskList);
+    }
+
+    public void setSubTaskList(HashMap<Integer, Subtask> subTaskList) {
+        this.subTaskList = subTaskList;
     }
 
     public void updateSubTask(Subtask updateSubtask) {
@@ -18,7 +32,7 @@ public class Epic extends Task{
     }
 
     public void setStatus() {
-        this.status = getStatus();
+        this.setStatus(getStatus());
     }
 
     public Status getStatus() {
@@ -36,7 +50,7 @@ public class Epic extends Task{
 
             Subtask objSubTask = subTaskList.get(subTaskId);
 
-            switch (objSubTask.status) {
+            switch (objSubTask.getStatus()) {
                 case NEW :
                     statusNew++;
                     break;
@@ -60,10 +74,10 @@ public class Epic extends Task{
     @Override
     public String toString() {
         return "Epic{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
+                "name='" + this.getName() + '\'' +
+                ", description='" + this.getDescription() + '\'' +
+                ", id=" + this.getId() +
+                ", status=" + this.getStatus() +
                 ", subTasks=" + subTaskList +
                 '}';
     }

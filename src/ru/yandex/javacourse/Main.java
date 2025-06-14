@@ -1,5 +1,9 @@
-public class Main {
+package ru.yandex.javacourse;
 
+import ru.yandex.javacourse.model.*;
+import ru.yandex.javacourse.service.TaskManager;
+
+public record Main() {
     public static void main(String[] args) {
         System.out.println("Поехали!");
         Task task = new Task("10", "10");

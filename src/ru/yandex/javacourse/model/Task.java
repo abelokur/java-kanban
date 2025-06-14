@@ -1,10 +1,13 @@
+package ru.yandex.javacourse.model;
+
 import java.util.Objects;
+import ru.yandex.javacourse.service.TaskManager;
 
 public class Task {
-    String name;
-    String description;
-    int id;
-    Status status;
+    private String name;
+    private String description;
+    private int id;
+    private Status status;
 
     public Task(String name, String description) {
         this.name = name;
@@ -27,6 +30,18 @@ public class Task {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setStatus(Status status) {
