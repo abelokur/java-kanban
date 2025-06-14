@@ -14,34 +14,35 @@ public class TaskManager {
     }
 
     // 2.a.Получение списка всех задач.
-    public HashMap<Integer, Task> getTaskList() {
+    public HashMap<Integer, Task> getAllTasks() {
         return new HashMap<Integer, Task>(taskList);
     }
 
-    public HashMap<Integer, Subtask> getSubTaskList() {
+    public HashMap<Integer, Subtask> getAllSubTasks() {
         return new HashMap<Integer, Subtask>(subtaskList);
     }
 
-    public HashMap<Integer, Epic> getEpicList() {
+    public HashMap<Integer, Epic> getAllEpics() {
         return new HashMap<Integer, Epic>(epicList);
     }
 
     // 2.b. Удаление всех задач.
     public void removeTasks() {
-        taskList = new HashMap<>();
+        taskList.clear();
     }
 
     public void removeSubtasks() {
-        subtaskList = new HashMap<>();
+        subtaskList.clear();
         for (Integer epicKey : epicList.keySet()) {
             Epic epicObject = epicList.get(epicKey);
-            epicObject.setSubTaskList(new HashMap<>());
+            epicObject.setSubTaskList();
             epicObject.setStatus();
         }
     }
 
     public void removeEpics() {
-        epicList = new HashMap<>();
+        epicList.clear();
+        subtaskList.clear();
     }
 
     public void removeAll() {
@@ -95,14 +96,29 @@ public class TaskManager {
     }
 
     public void removeSubtask(int id) {
-        subtaskList.remove(id);
-        for (Integer epicKey : epicList.keySet()) {
-            Epic epic = epicList.get(epicKey);
-            epic.removeSubTask(id);
+
+        Subtask subtask = subtaskList.get(id);
+        Epic epic = subtask.getEpic();
+        HashMap<Integer, Subtask> epicSubTaskList = epic.getSubTaskList();
+
+        if (epicSubTaskList != null) {
+            for (Integer subTaskId : epicSubTaskList.keySet()) {
+                if (epicSubTaskList.get(subTaskId).getId() == id) {
+                    epic.removeSubTask(subTaskId);
+                }
+            }
         }
+
+        subtaskList.remove(id);
     }
 
     public void removeEpic(int id) {
+        Epic epic = epicList.get(id);
+        if (epic != null) {
+            for (Integer subTaskId : epic.getSubTaskList().keySet()) {
+                subtaskList.remove(subTaskId);
+            }
+        }
         epicList.remove(id);
     }
 

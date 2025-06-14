@@ -24,7 +24,17 @@ public class Epic extends Task {
     }
 
     public void setSubTaskList(HashMap<Integer, Subtask> subTaskList) {
+        Subtask subTask;
         this.subTaskList = subTaskList;
+
+        for (Integer subTaskId : subTaskList.keySet()) {
+            subTask = subTaskList.get(subTaskId);
+            subTask.setEpic(this);
+        }
+    }
+
+    public void setSubTaskList() {
+        subTaskList.clear();
     }
 
     public void updateSubTask(Subtask updateSubtask) {
