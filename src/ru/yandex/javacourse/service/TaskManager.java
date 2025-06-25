@@ -1,138 +1,57 @@
 package ru.yandex.javacourse.service;
 
+import ru.yandex.javacourse.model.Epic;
+import ru.yandex.javacourse.model.Subtask;
+import ru.yandex.javacourse.model.Task;
+
 import java.util.HashMap;
-import ru.yandex.javacourse.model.*;
 
-public class TaskManager {
-    private static int id;
-    private HashMap<Integer, Task> taskList = new HashMap<>();
-    private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
-    private HashMap<Integer, Epic> epicList = new HashMap<>();
-
-    public static int getId() {
-        return id++;
-    }
+public interface TaskManager {
 
     // 2.a.Получение списка всех задач.
-    public HashMap<Integer, Task> getAllTasks() {
-        return new HashMap<Integer, Task>(taskList);
-    }
+    HashMap<Integer, Task> getAllTasks();
 
-    public HashMap<Integer, Subtask> getAllSubTasks() {
-        return new HashMap<Integer, Subtask>(subtaskList);
-    }
+    HashMap<Integer, Subtask> getAllSubTasks();
 
-    public HashMap<Integer, Epic> getAllEpics() {
-        return new HashMap<Integer, Epic>(epicList);
-    }
+    HashMap<Integer, Epic> getAllEpics();
 
     // 2.b. Удаление всех задач.
-    public void removeTasks() {
-        taskList.clear();
-    }
+    void removeTasks();
 
-    public void removeSubtasks() {
-        subtaskList.clear();
-        for (Integer epicKey : epicList.keySet()) {
-            Epic epicObject = epicList.get(epicKey);
-            epicObject.setSubTaskList();
-            epicObject.setStatus();
-        }
-    }
+    void removeSubtasks();
 
-    public void removeEpics() {
-        epicList.clear();
-        subtaskList.clear();
-    }
+    void removeEpics();
 
-    public void removeAll() {
-        removeTasks();
-        removeSubtasks();
-        removeEpics();
-    }
+    void removeAll();
 
     //2.c. Получение по идентификатору
-    public Task getTask(int id) {
-        return taskList.get(id);
-    }
+    Task getTask(int id);
 
-    public Subtask getSubtask(int id) {
-        return subtaskList.get(id);
-    }
+    Subtask getSubtask(int id);
 
-    public Epic getEpic(int id) {
-        return epicList.get(id);
-    }
+    Epic getEpic(int id);
 
     // 2.d. Создание. Сам объект должен передаваться в качестве параметра.
-    public void createTasks(Task task) {
-        taskList.put(task.getId(), task);
-    }
+    void createTasks(Task task);
 
-    public void createSubtasks(Subtask subtask) {
-        subtaskList.put(subtask.getId(), subtask);
-    }
+    void createSubtasks(Subtask subtask);
 
-    public void createEpics(Epic epic) {
-        epicList.put(epic.getId(), epic);
-    }
+    void createEpics(Epic epic);
 
     //2. e. Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.
-    public void updateTask(Task task) {
-        taskList.put(task.getId(), task);
-    }
+    void updateTask(Task task);
 
-    public void updateSubtask(Subtask subtask) {
-        subtaskList.put(subtask.getId(), subtask);
-    }
+    void updateSubtask(Subtask subtask);
 
-    public void updateEpic(Epic epic) {
-        epicList.put(epic.getId(), epic);
-    }
+    void updateEpic(Epic epic);
 
     // 2.f. Удаление по идентификатору.
-    public void removeTask(int id) {
-        taskList.remove(id);
-    }
+    void removeTask(int id);
 
-    public void removeSubtask(int id) {
+    void removeSubtask(int id);
 
-        Subtask subtask = subtaskList.get(id);
-        Epic epic = subtask.getEpic();
-        HashMap<Integer, Subtask> epicSubTaskList = epic.getSubTaskList();
-
-        if (epicSubTaskList != null) {
-            for (Integer subTaskId : epicSubTaskList.keySet()) {
-                if (epicSubTaskList.get(subTaskId).getId() == id) {
-                    epic.removeSubTask(subTaskId);
-                }
-            }
-        }
-
-        subtaskList.remove(id);
-    }
-
-    public void removeEpic(int id) {
-        Epic epic = epicList.get(id);
-        if (epic != null) {
-            for (Integer subTaskId : epic.getSubTaskList().keySet()) {
-                subtaskList.remove(subTaskId);
-            }
-        }
-        epicList.remove(id);
-    }
+    void removeEpic(int id);
 
     // 3.a. Получение списка всех подзадач определённого эпика
-    public String getAllSubtasks(Epic epic) {
-        return epic.toString();
-    }
-
-    @Override
-    public String toString() {
-        return "TaskManager{" +
-                "taskList=" + taskList +
-                ", subtaskList=" + subtaskList +
-                ", epicList=" + epicList +
-                '}';
-    }
+    String getAllSubtasks(Epic epic);
 }

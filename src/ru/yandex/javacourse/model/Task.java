@@ -1,7 +1,8 @@
 package ru.yandex.javacourse.model;
 
 import java.util.Objects;
-import ru.yandex.javacourse.service.TaskManager;
+
+import ru.yandex.javacourse.service.InMemoryTaskManager;
 
 public class Task {
     private String name;
@@ -12,7 +13,7 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.id = TaskManager.getId();
+        this.id = InMemoryTaskManager.getId();
         this.status = Status.NEW;
     }
 
