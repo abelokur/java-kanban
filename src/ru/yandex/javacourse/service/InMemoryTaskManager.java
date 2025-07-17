@@ -3,6 +3,7 @@ package ru.yandex.javacourse.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import ru.yandex.javacourse.model.*;
 
@@ -44,11 +45,17 @@ public class InMemoryTaskManager implements TaskManager {
     // 2.b. Удаление всех задач.
     @Override
     public void removeTasks() {
+        for (Integer taskId : taskList.keySet()) {
+            historyManager.remove(taskId);
+        }
         taskList.clear();
     }
 
     @Override
     public void removeSubtasks() {
+        for (Integer subTaskId : subtaskList.keySet()) {
+            historyManager.remove(subTaskId);
+        }
         subtaskList.clear();
         for (Integer epicKey : epicList.keySet()) {
             Epic epicObject = epicList.get(epicKey);
@@ -59,6 +66,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpics() {
+        for (Integer epicId : epicList.keySet()) {
+            historyManager.remove(epicId);
+        }
+        for (Integer subTaskId : subtaskList.keySet()) {
+            historyManager.remove(subTaskId);
+        }
         epicList.clear();
         subtaskList.clear();
     }
@@ -124,6 +137,7 @@ public class InMemoryTaskManager implements TaskManager {
     // 2.f. Удаление по идентификатору.
     @Override
     public void removeTask(int id) {
+        historyManager.remove(id);
         taskList.remove(id);
     }
 
@@ -141,7 +155,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         }
-
+        historyManager.remove(id);
         subtaskList.remove(id);
     }
 
@@ -150,6 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epicList.get(id);
         if (epic != null) {
             for (Integer subTaskId : epic.getSubTaskList().keySet()) {
+//                historyManager.remove(subTaskId);
                 subtaskList.remove(subTaskId);
             }
         }
