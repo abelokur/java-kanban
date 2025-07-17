@@ -30,6 +30,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         int taskId = object.getId();
         if (hashMapList.containsKey(taskId)) {
             final Node node = hashMapList.get(taskId);
+            System.out.println("PRINT: " + node);
             removeNode(node);
         }
         hashMapList.put(taskId, linkedList.linkLast(object));
@@ -45,7 +46,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeNode(Node node) {
         Node nodePrev = node.prev;
         Node nodeNext = node.next;
-        nodePrev.next = nodeNext.prev;
+        nodePrev.next = nodeNext;
+        nodeNext.prev = nodePrev;
         LinkedListClass.size--;
     }
 
@@ -77,18 +79,5 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
             return arrayList;
         }
-/*
-        public ArrayList<Node<T>> getTasks() {
-            ArrayList<Node<T>> arrayList = new ArrayList<>();
-            Node<T> start = head;
-            if (start == null)
-                throw new NoSuchElementException();
-
-            while (start != null) {
-                arrayList.add(start);
-                start = start.next;
-            }
-            return arrayList;
-        }*/
     }
 }

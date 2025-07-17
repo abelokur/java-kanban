@@ -80,15 +80,11 @@ public record Main() {
 
 
         LinkedListClass<Integer> linkedListClass = new LinkedListClass<Integer>();
-        //InMemoryTaskManager.LinkedListClass<Integer> linkedListClass = new LinkedListClass<>() ;
-        //Node<Integer> node1 = new Node<>()
-        //linkedListClass.linkLast(1);
-        //InMemoryTaskManager.LinkedListClass<Integer>
+
         linkedListClass.linkLast(new Task("task1", "task1"));
         linkedListClass.linkLast(new Task("task2", "task2"));
         linkedListClass.linkLast(new Task("task3", "task3"));
 
-        //ArrayList<Node<Integer>> nodeList = linkedListClass.getTasks();
         ArrayList<Task> nodeList = linkedListClass.getTasks();
         System.out.println(nodeList);
     }
