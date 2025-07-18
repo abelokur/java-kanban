@@ -66,7 +66,8 @@ public class InMemoryHistoryManager implements HistoryManager {
             nodePrev.next = nodeNext;
         }
         if (nodeNext != null) {
-            nodeNext.prev = nodePrev;}
+            nodeNext.prev = nodePrev;
+        }
         LinkedListClass.size--;
         return true;
     }
