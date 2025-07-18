@@ -1,9 +1,7 @@
 package ru.yandex.javacourse.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import ru.yandex.javacourse.model.*;
 
@@ -12,9 +10,6 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskList = new HashMap<>();
     private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private HashMap<Integer, Epic> epicList = new HashMap<>();
-    //private List<Task> historyList = new ArrayList<>();
-
-    //static final int HISTORY_LIST_LENGTH = 10;
 
     HistoryManager historyManager = Managers.getDefaultHistory();
 
