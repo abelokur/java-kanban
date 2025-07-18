@@ -30,25 +30,45 @@ public class InMemoryHistoryManager implements HistoryManager {
         int taskId = object.getId();
         if (hashMapList.containsKey(taskId)) {
             final Node node = hashMapList.get(taskId);
-            System.out.println("PRINT: " + node);
-            removeNode(node);
+            if (removeNode(node, object)) {
+                hashMapList.put(taskId, linkedList.linkLast(object));
+            }
+        } else {
+            hashMapList.put(taskId, linkedList.linkLast(object));
         }
-        hashMapList.put(taskId, linkedList.linkLast(object));
+
         //historyList.add(object);
     }
 
     @Override
     public void remove(int id) {
         //historyList.remove(id);
-        removeNode(hashMapList.get(id));
+        removeNode(hashMapList.get(id), null);
     }
 
-    public void removeNode(Node node) {
+    public boolean removeNode(Node node, Task object) {
+        if (node.prev == null && node.next == null) {
+            return false;
+        }
+
+        if (node.prev == null) {
+            linkedList.head = node.next;
+            LinkedListClass.size--;
+        }
+        if (node.next == null) {
+            linkedList.tail = node.prev;
+            LinkedListClass.size--;
+        }
+
         Node nodePrev = node.prev;
         Node nodeNext = node.next;
-        nodePrev.next = nodeNext;
-        nodeNext.prev = nodePrev;
+        if (nodePrev != null) {
+            nodePrev.next = nodeNext;
+        }
+        if (nodeNext != null) {
+            nodeNext.prev = nodePrev;}
         LinkedListClass.size--;
+        return true;
     }
 
     public static class LinkedListClass<T> {
