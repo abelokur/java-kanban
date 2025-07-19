@@ -41,17 +41,16 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public void removeNode(Node node) {
         if (node != null) {
-
             if (node.prev != null) {
                 node.prev.next = node.next;
             } else {
-                linkedList.head = node.next; // Если узел — голова
+                linkedList.head = node.next;
             }
 
             if (node.next != null) {
                 node.next.prev = node.prev;
             } else {
-                linkedList.tail = node.prev; // Если узел — хвост
+                linkedList.tail = node.prev;
             }
             LinkedListClass.size--;
         }
