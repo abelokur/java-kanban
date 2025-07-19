@@ -10,66 +10,51 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    //private List<Task> historyList = new ArrayList<>();
-    private HashMap<Integer, Node<Task>> hashMapList = new HashMap<>();
-    private LinkedListClass<Task> linkedList = new LinkedListClass<>();
-    //static final int HISTORY_LIST_LENGTH = 10;
+
+    private final HashMap<Integer, Node<Task>> hashMapList = new HashMap<>();
+    private final LinkedListClass<Task> linkedList = new LinkedListClass<>();
+
 
     @Override
     public List<Task> getDefaultHistory() {
-        /*return historyList;*/
+
         return linkedList.getTasks();
     }
 
 
     @Override
     public void add(Task object) {
-        /*if (historyList.size() >= HISTORY_LIST_LENGTH ) {
-            historyList.remove(0);
-        }*/
+
         int taskId = object.getId();
         if (hashMapList.containsKey(taskId)) {
-            final Node node = hashMapList.get(taskId);
-            if (removeNode(node, object)) {
-                hashMapList.put(taskId, linkedList.linkLast(object));
-            }
-        } else {
-            hashMapList.put(taskId, linkedList.linkLast(object));
+            removeNode(hashMapList.get(taskId));
         }
 
-        //historyList.add(object);
+        Node<Task> newNode = linkedList.linkLast(object);
+        hashMapList.put(taskId, newNode);
     }
 
     @Override
     public void remove(int id) {
-        //historyList.remove(id);
-        removeNode(hashMapList.get(id), null);
+        removeNode(hashMapList.get(id));
     }
 
-    public boolean removeNode(Node node, Task object) {
-        if (node.prev == null && node.next == null) {
-            return false;
-        }
+    public void removeNode(Node node) {
+        if (node != null) {
 
-        if (node.prev == null) {
-            linkedList.head = node.next;
+            if (node.prev != null) {
+                node.prev.next = node.next;
+            } else {
+                linkedList.head = node.next; // Если узел — голова
+            }
+
+            if (node.next != null) {
+                node.next.prev = node.prev;
+            } else {
+                linkedList.tail = node.prev; // Если узел — хвост
+            }
             LinkedListClass.size--;
         }
-        if (node.next == null) {
-            linkedList.tail = node.prev;
-            LinkedListClass.size--;
-        }
-
-        Node nodePrev = node.prev;
-        Node nodeNext = node.next;
-        if (nodePrev != null) {
-            nodePrev.next = nodeNext;
-        }
-        if (nodeNext != null) {
-            nodeNext.prev = nodePrev;
-        }
-        LinkedListClass.size--;
-        return true;
     }
 
     public static class LinkedListClass<T> {
