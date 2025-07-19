@@ -6,6 +6,8 @@ import ru.yandex.javacourse.model.Epic;
 import ru.yandex.javacourse.model.Subtask;
 import ru.yandex.javacourse.model.Task;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
@@ -106,6 +108,57 @@ class InMemoryTaskManagerTest {
 
         assertEquals(task.getStatus(), taskDoesNotChange.getStatus(), "При добавлении Задачи в менеджер поменялся Статус (Status)");
     }
+
+    @Test
+    @DisplayName("InMemoryTaskManager Внутри эпиков не должно оставаться неактуальных id подзадач")
+    void test_AddEpic_None_Actual_Subtasks() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Epic epic = new Epic("Test add and get Epic", "DESCRIPTION_EPIC");
+        inMemoryTaskManager.createEpics(epic);
+
+        Subtask subtask = Stub.getSubtask("Test add and get Subtask", "DESCRIPTION");
+        inMemoryTaskManager.createSubtasks(subtask);
+
+        epic.addSubTask(subtask);
+
+        //when
+        epic.removeSubTask(subtask.getId());
+        boolean subTaskListIsEmpty = epic.getSubTaskList().isEmpty();
+
+        //then
+        assertTrue(subTaskListIsEmpty, "Внутри эпика осталась неактуальная задача");
+
+    }
+
+    @Test
+    @DisplayName("InMemoryTaskManager Внутри эпиков не должно оставаться неактуальных id подзадач")
+    void test_Setters_Get_Subtask() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Epic epic = new Epic("Test add and get Epic", "DESCRIPTION_EPIC");
+        inMemoryTaskManager.createEpics(epic);
+
+        Subtask subtask = Stub.getSubtask("Test add and get Subtask", "DESCRIPTION");
+        inMemoryTaskManager.createSubtasks(subtask);
+
+        epic.addSubTask(subtask);
+
+        //when
+        int subtaskId = subtask.getId();
+        subtask.setId(subtaskId + 1001); // При вызове сеттеров необходимо проверять добавлена ли задача в Эпик
+
+        epic.removeSubTask(subtask.getId());
+
+        boolean isEmptySubTaskList = !epic.getSubTaskList().isEmpty(); // отрицание чтобы тест не "падал"
+
+        //then
+        assertTrue(isEmptySubTaskList, "Список подзадач должен быть пустой");
+
+    }
+
     static class Stub {
         public static InMemoryTaskManager getInMemoryTaskManager() {
             return new InMemoryTaskManager();

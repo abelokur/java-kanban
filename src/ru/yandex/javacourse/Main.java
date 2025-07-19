@@ -1,20 +1,20 @@
 package ru.yandex.javacourse;
 
 import ru.yandex.javacourse.model.*;
-import ru.yandex.javacourse.service.TaskManager;
+import ru.yandex.javacourse.service.InMemoryTaskManager;
+import ru.yandex.javacourse.service.InMemoryHistoryManager.LinkedListClass;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public record Main() {
     public static void main(String[] args) {
         System.out.println("Поехали!");
-        {
+
             Task task = new Task("10", "10");
             System.out.println(task.getId());
             Task task1 = new Task("20", "20");
             System.out.println(task1.getId());
-
-            TaskManager taskManager = new TaskManager();
+            InMemoryTaskManager taskManager = new InMemoryTaskManager();
             System.out.println("111: " + taskManager);
 
 
@@ -49,6 +49,43 @@ public record Main() {
             System.out.println(taskManager);
             taskManager.removeEpic(epic1.getId());
             System.out.println(taskManager);
+
+
+        System.out.println("Задачи:");
+        for (Integer taskObject : taskManager.getAllTasks().keySet()) {
+
+            System.out.println(taskManager.getTask(taskObject));
         }
+        System.out.println("Эпики:");
+        for (Integer taskObject : taskManager.getAllEpics().keySet()) {
+
+            Epic epicObject = taskManager.getEpic(taskObject);
+
+            System.out.println(epicObject);
+
+            for (Integer index : epicObject.getSubTaskList().keySet()) {
+                System.out.println(epicObject.getSubTaskList().get(index));
+            }
+
+        }
+        System.out.println("Подзадачи:");
+        for (Integer subTaskId : taskManager.getAllSubTasks().keySet()) {
+            System.out.println(taskManager.getAllSubTasks().get(subTaskId));
+        }
+
+        System.out.println("История:");
+        for (Task taskHistory : taskManager.getDefaultHistory()) {
+            System.out.println(taskHistory);
+        }
+
+
+        LinkedListClass<Integer> linkedListClass = new LinkedListClass<Integer>();
+
+        linkedListClass.linkLast(new Task("task1", "task1"));
+        linkedListClass.linkLast(new Task("task2", "task2"));
+        linkedListClass.linkLast(new Task("task3", "task3"));
+
+        ArrayList<Task> nodeList = linkedListClass.getTasks();
+        System.out.println(nodeList);
     }
 }

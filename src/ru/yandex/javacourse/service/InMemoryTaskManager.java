@@ -1,6 +1,5 @@
 package ru.yandex.javacourse.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,9 +10,6 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskList = new HashMap<>();
     private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private HashMap<Integer, Epic> epicList = new HashMap<>();
-    //private List<Task> historyList = new ArrayList<>();
-
-    //static final int HISTORY_LIST_LENGTH = 10;
 
     HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -44,11 +40,17 @@ public class InMemoryTaskManager implements TaskManager {
     // 2.b. Удаление всех задач.
     @Override
     public void removeTasks() {
+        for (Integer taskId : taskList.keySet()) {
+            historyManager.remove(taskId);
+        }
         taskList.clear();
     }
 
     @Override
     public void removeSubtasks() {
+        for (Integer subTaskId : subtaskList.keySet()) {
+            historyManager.remove(subTaskId);
+        }
         subtaskList.clear();
         for (Integer epicKey : epicList.keySet()) {
             Epic epicObject = epicList.get(epicKey);
@@ -59,6 +61,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpics() {
+        for (Integer epicId : epicList.keySet()) {
+            historyManager.remove(epicId);
+        }
+        for (Integer subTaskId : subtaskList.keySet()) {
+            historyManager.remove(subTaskId);
+        }
         epicList.clear();
         subtaskList.clear();
     }
@@ -124,6 +132,7 @@ public class InMemoryTaskManager implements TaskManager {
     // 2.f. Удаление по идентификатору.
     @Override
     public void removeTask(int id) {
+        historyManager.remove(id);
         taskList.remove(id);
     }
 
@@ -131,17 +140,14 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeSubtask(int id) {
 
         Subtask subtask = subtaskList.get(id);
-        Epic epic = subtask.getEpic();
-        HashMap<Integer, Subtask> epicSubTaskList = epic.getSubTaskList();
-
-        if (epicSubTaskList != null) {
-            for (Integer subTaskId : epicSubTaskList.keySet()) {
-                if (epicSubTaskList.get(subTaskId).getId() == id) {
-                    epic.removeSubTask(subTaskId);
-                }
+        if (subtask != null) {
+            Epic epic = subtask.getEpic();
+            if (epic != null) {
+                epic.removeSubTask(id);
+                epic.setStatus();
             }
         }
-
+        historyManager.remove(id);
         subtaskList.remove(id);
     }
 
