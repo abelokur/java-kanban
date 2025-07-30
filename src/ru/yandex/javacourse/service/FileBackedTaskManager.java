@@ -14,18 +14,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
+        int maxId = 0; // получить максимальное id при загрузке файла
+
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         try (FileReader fileReader = new FileReader(fileBackedTaskManager.fileTaskManager.getName());
              BufferedReader br = new BufferedReader(fileReader)) {
-           /*System.out.println("вычитываем файл:");
-            while (br.ready()) {
-                String line = br.readLine();
-                System.out.println(line);
-            }*/
-            String[] lineTask = new String[6];
-            //String[]
-           // String line =
-                    br.readLine();
+
+            br.readLine(); // получим первую строку файла, она нам не нужна
+
             while (br.ready()) {
 
 
@@ -42,6 +38,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 } catch (ArrayIndexOutOfBoundsException e) {
                     ;
                 }
+
+                maxId = Math.max(maxId, Integer.parseInt(lineArray[0]));
 
                 switch (TypeTask.valueOf(lineArray[1])) {
                     case TypeTask.TASK:
@@ -79,11 +77,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
                         break;
                 }
-
+/*
                 for (String str : lineArray) {
                     System.out.println(str);
                     //if ()
-                }
+                }*/
                 /*System.out.println(lineArray[0]);
                 System.out.println(lineArray[1]);
                 System.out.println(lineArray[2]);
@@ -91,12 +89,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 System.out.println(lineArray[4]);
                 System.out.println(lineArray[5]);*/
 
-                System.out.println();
+                //System.out.println();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Установка id
+        for (int i = 0; i <= maxId; i++) {
+            InMemoryTaskManager.getId();
+        }
+
         return fileBackedTaskManager;
     }
 
@@ -128,8 +132,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 fileWriter.write(toString(subTask));
             }
 
-    }catch (IOException e) {
-            e.printStackTrace();
+    } catch (IOException e) {
+            try {
+                throw new ManagerSaveException("Ошибка записи файла: ", fileTaskManager);
+            } catch (ManagerSaveException exception) {
+                System.out.println(exception.getDetailMessage());
+            }
+
         }
 /*
         try (Writer fileWriter = new FileWriter(fileTaskManager.getName())) {
