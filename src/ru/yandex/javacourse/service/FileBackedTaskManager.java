@@ -3,7 +3,6 @@ package ru.yandex.javacourse.service;
 import ru.yandex.javacourse.model.*;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
@@ -24,30 +23,29 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
             while (br.ready()) {
 
-
                 String line = br.readLine();
                 String[] lineArray = line.split(",");
 
-                System.out.println(lineArray[0]);
-                System.out.println(lineArray[1]);
-                System.out.println(lineArray[2]);
-                System.out.println(lineArray[3]);
-                System.out.println(lineArray[4]);
-                try {
-                    System.out.println(lineArray[5]);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    ;
-                }
-
                 maxId = Math.max(maxId, Integer.parseInt(lineArray[0]));
 
-                switch (TypeTask.valueOf(lineArray[1])) {
+                int idObject = Integer.parseInt(lineArray[0]);
+                TypeTask typeObject = TypeTask.valueOf(lineArray[1]);
+                String nameObject = lineArray[2];
+                Status statusObject = Status.valueOf(lineArray[3]);
+                String descriptionObject = lineArray[4];
+
+                int epicObjectId = -1;
+                if (lineArray.length == 6) {
+                    epicObjectId = Integer.parseInt(lineArray[5]);
+                }
+
+                switch (typeObject) {
                     case TypeTask.TASK:
 
-                        Task task = new Task(lineArray[2], lineArray[4]);
+                        Task task = new Task(nameObject, descriptionObject);
 
-                        task.setId(Integer.parseInt(lineArray[0]));
-                        task.setStatus(Status.valueOf(lineArray[3]));
+                        task.setId(idObject);
+                        task.setStatus(statusObject);
 
                         fileBackedTaskManager.createTasks(task);
 
@@ -55,12 +53,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
                     case TypeTask.SUBTASK:
 
+                        Subtask subtask = new Subtask(nameObject, descriptionObject);
 
-                        Subtask subtask = new Subtask(lineArray[2], lineArray[4]);
+                        subtask.setId(idObject);
+                        subtask.setStatus(statusObject);
+                        subtask.setEpic(fileBackedTaskManager.getEpic(epicObjectId));
 
-                        subtask.setId(Integer.parseInt(lineArray[0]));
-                        subtask.setStatus(Status.valueOf(lineArray[3]));
-                        subtask.setEpic(fileBackedTaskManager.getEpic(Integer.parseInt(lineArray[5])));
+                        // в файл эпики всегда записываем до подзадач, соответственно эпики создаются раньше подзадач
+                        Epic addEpic = fileBackedTaskManager.getEpic(epicObjectId);
+                        addEpic.addSubTask(subtask);
 
                         fileBackedTaskManager.createSubtasks(subtask);
 
@@ -68,28 +69,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
                     case TypeTask.EPIC:
 
-                        Epic epic = new Epic(lineArray[2], lineArray[4]);
+                        Epic epic = new Epic(nameObject, descriptionObject);
 
-                        epic.setId(Integer.parseInt(lineArray[0]));
-                        epic.setStatus(Status.valueOf(lineArray[3]));
+                        epic.setId(idObject);
+                        epic.setStatus(statusObject);
 
                         fileBackedTaskManager.createEpics(epic);
 
                         break;
                 }
-/*
-                for (String str : lineArray) {
-                    System.out.println(str);
-                    //if ()
-                }*/
-                /*System.out.println(lineArray[0]);
-                System.out.println(lineArray[1]);
-                System.out.println(lineArray[2]);
-                System.out.println(lineArray[3]);
-                System.out.println(lineArray[4]);
-                System.out.println(lineArray[5]);*/
-
-                //System.out.println();
             }
 
         } catch (IOException e) {
@@ -106,11 +94,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     private void save() {
         String head = "id,type,name,status,description,epic\n";
+
         HashMap<Integer, Task> allTasks = super.getAllTasks();
         HashMap<Integer, Subtask> allSubTasks = super.getAllSubTasks();
         HashMap<Integer, Epic> allEpics = super.getAllEpics();
-
-        //StringBuilder fileContents = new StringBuilder();
 
         try (Writer fileWriter = new FileWriter(fileTaskManager.getName())) {
 
@@ -118,7 +105,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
             for (Integer eachTask : allTasks.keySet()) {
                 Task task = allTasks.get(eachTask);
-                //fileContents.append(toString(task));
                 fileWriter.write(toString(task));
             }
 
@@ -138,19 +124,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             } catch (ManagerSaveException exception) {
                 System.out.println(exception.getDetailMessage());
             }
-
         }
-/*
-        try (Writer fileWriter = new FileWriter(fileTaskManager.getName())) {
-            fileWriter.write(fileContents.toString());
-            //Writer fileWriter1 = fileTaskManager.;
-        }
-            catch (IOException e) {
-                e.printStackTrace();
-            }*/
     }
 
-    String toString(Task task) { //TypeTask.valueOf(task.getClass().toString())
+    String toString(Task task) {
         return task.getId() + "," + TypeTask.TASK + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + ",\n";
     }
 
@@ -161,8 +138,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     String toString(Epic epic) {
         return epic.getId() + "," + TypeTask.EPIC + "," + epic.getName() + "," + epic.getStatus() + "," + epic.getDescription() + ",\n";
     }
-
-
 
     @Override
     public void removeTasks() {
@@ -242,5 +217,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         save();
     }
 
-
+    public void saveEmptyFile() {
+        save();
     }
+}
