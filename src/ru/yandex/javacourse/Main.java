@@ -6,7 +6,7 @@ import ru.yandex.javacourse.service.InMemoryHistoryManager.LinkedListClass;
 
 import java.util.ArrayList;
 
-public record Main() {
+public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
