@@ -43,48 +43,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 Status statusObject = Status.valueOf(lineArray[3]);
                 String descriptionObject = lineArray[4];
 
-                int epicObjectId = -1;
-                if (lineArray.length == 6) {
-                    epicObjectId = Integer.parseInt(lineArray[5]);
-                }
+                int epicObjectId = getEpicObjectId(lineArray);
 
                 switch (typeObject) {
                     case TypeTask.TASK:
-
-                        Task task = new Task(nameObject, descriptionObject);
-
-                        task.setId(idObject);
-                        task.setStatus(statusObject);
-
-                        fileBackedTaskManager.createTasks(task);
-
+                        loadTask(fileBackedTaskManager, idObject, typeObject, nameObject, statusObject, descriptionObject);
                         break;
-
                     case TypeTask.SUBTASK:
-
-                        Subtask subtask = new Subtask(nameObject, descriptionObject);
-
-                        subtask.setId(idObject);
-                        subtask.setStatus(statusObject);
-                        subtask.setEpic(fileBackedTaskManager.getEpic(epicObjectId));
-
-                        // в файл эпики всегда записываем до подзадач, соответственно эпики создаются раньше подзадач
-                        Epic addEpic = fileBackedTaskManager.getEpic(epicObjectId);
-                        addEpic.addSubTask(subtask);
-
-                        fileBackedTaskManager.createSubtasks(subtask);
-
+                        loadSubtask(fileBackedTaskManager, idObject, typeObject, nameObject, statusObject, descriptionObject, epicObjectId);
                         break;
-
                     case TypeTask.EPIC:
-
-                        Epic epic = new Epic(nameObject, descriptionObject);
-
-                        epic.setId(idObject);
-                        epic.setStatus(statusObject);
-
-                        fileBackedTaskManager.createEpics(epic);
-
+                        loadEpic(fileBackedTaskManager, idObject, typeObject, nameObject, statusObject, descriptionObject);
                         break;
                 }
             }
@@ -93,12 +62,55 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             e.printStackTrace();
         }
 
-        // Установка id
+        setMaxId(maxId);
+
+        return fileBackedTaskManager;
+    }
+
+    private static void loadTask(FileBackedTaskManager fileBackedTaskManager, int idObject, TypeTask typeObject, String nameObject, Status statusObject, String descriptionObject) {
+        Task task = new Task(nameObject, descriptionObject);
+
+        task.setId(idObject);
+        task.setStatus(statusObject);
+
+        fileBackedTaskManager.createTasks(task);
+    }
+
+    private static void loadSubtask(FileBackedTaskManager fileBackedTaskManager, int idObject, TypeTask typeObject, String nameObject, Status statusObject, String descriptionObject, int epicObjectId) {
+        Subtask subtask = new Subtask(nameObject, descriptionObject);
+
+        subtask.setId(idObject);
+        subtask.setStatus(statusObject);
+        subtask.setEpic(fileBackedTaskManager.getEpic(epicObjectId));
+
+        // в файл эпики всегда записываем до подзадач, соответственно эпики создаются раньше подзадач
+        Epic addEpic = fileBackedTaskManager.getEpic(epicObjectId);
+        addEpic.addSubTask(subtask);
+
+        fileBackedTaskManager.createSubtasks(subtask);
+    }
+
+    private static void loadEpic(FileBackedTaskManager fileBackedTaskManager, int idObject, TypeTask typeObject, String nameObject, Status statusObject, String descriptionObject) {
+        Epic epic = new Epic(nameObject, descriptionObject);
+
+        epic.setId(idObject);
+        epic.setStatus(statusObject);
+
+        fileBackedTaskManager.createEpics(epic);
+    }
+
+    private static void setMaxId(int maxId) {
         for (int i = 0; i <= maxId; i++) {
             InMemoryTaskManager.getId();
         }
+    }
 
-        return fileBackedTaskManager;
+    private static int getEpicObjectId(String[] lineArray) {
+        int epicObjectId = -1;
+        if (lineArray.length == 6) {
+            epicObjectId = Integer.parseInt(lineArray[5]);
+        }
+        return epicObjectId;
     }
 
     private void save() {
