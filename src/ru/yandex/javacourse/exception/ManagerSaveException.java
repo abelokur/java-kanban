@@ -1,4 +1,4 @@
-package ru.yandex.javacourse.model;
+package ru.yandex.javacourse.exception;
 
 import java.io.File;
 import java.io.IOException;
