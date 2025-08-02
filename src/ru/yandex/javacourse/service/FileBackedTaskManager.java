@@ -9,14 +9,15 @@ import java.util.HashMap;
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     File fileTaskManager;
 
-    public FileBackedTaskManager(File fileTaskManager) {
+    public void setFileName(File fileTaskManager) {
         this.fileTaskManager = fileTaskManager;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
         int maxId = 0; // получить максимальное id при загрузке файла
 
-        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
+        fileBackedTaskManager.setFileName(file);
         try (FileReader fileReader = new FileReader(fileBackedTaskManager.fileTaskManager.getName());
              BufferedReader br = new BufferedReader(fileReader)) {
 
