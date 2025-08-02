@@ -9,6 +9,13 @@ import java.util.HashMap;
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     File fileTaskManager;
 
+    public FileBackedTaskManager() {
+    }
+
+    public FileBackedTaskManager(File fileTaskManager) {
+        this.fileTaskManager = fileTaskManager;
+    }
+
     public void setFileName(File fileTaskManager) {
         this.fileTaskManager = fileTaskManager;
     }
