@@ -2,7 +2,6 @@ package ru.yandex.javacourse.service;
 
 import java.util.HashMap;
 import java.util.List;
-
 import ru.yandex.javacourse.model.*;
 
 public class InMemoryTaskManager implements TaskManager {

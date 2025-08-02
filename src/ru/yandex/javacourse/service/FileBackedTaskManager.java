@@ -47,13 +47,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
                 switch (typeObject) {
                     case TypeTask.TASK:
-                        loadTask(fileBackedTaskManager, idObject, typeObject, nameObject, statusObject, descriptionObject);
+                        loadTask(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject);
                         break;
                     case TypeTask.SUBTASK:
-                        loadSubtask(fileBackedTaskManager, idObject, typeObject, nameObject, statusObject, descriptionObject, epicObjectId);
+                        loadSubtask(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject, epicObjectId);
                         break;
                     case TypeTask.EPIC:
-                        loadEpic(fileBackedTaskManager, idObject, typeObject, nameObject, statusObject, descriptionObject);
+                        loadEpic(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject);
                         break;
                 }
             }
@@ -67,7 +67,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return fileBackedTaskManager;
     }
 
-    private static void loadTask(FileBackedTaskManager fileBackedTaskManager, int idObject, TypeTask typeObject, String nameObject, Status statusObject, String descriptionObject) {
+    private static void loadTask(FileBackedTaskManager fileBackedTaskManager, int idObject, String nameObject, Status statusObject, String descriptionObject) {
         Task task = new Task(nameObject, descriptionObject);
 
         task.setId(idObject);
@@ -76,7 +76,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         fileBackedTaskManager.createTasks(task);
     }
 
-    private static void loadSubtask(FileBackedTaskManager fileBackedTaskManager, int idObject, TypeTask typeObject, String nameObject, Status statusObject, String descriptionObject, int epicObjectId) {
+    private static void loadSubtask(FileBackedTaskManager fileBackedTaskManager, int idObject, String nameObject, Status statusObject, String descriptionObject, int epicObjectId) {
         Subtask subtask = new Subtask(nameObject, descriptionObject);
 
         subtask.setId(idObject);
@@ -90,7 +90,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         fileBackedTaskManager.createSubtasks(subtask);
     }
 
-    private static void loadEpic(FileBackedTaskManager fileBackedTaskManager, int idObject, TypeTask typeObject, String nameObject, Status statusObject, String descriptionObject) {
+    private static void loadEpic(FileBackedTaskManager fileBackedTaskManager, int idObject, String nameObject, Status statusObject, String descriptionObject) {
         Epic epic = new Epic(nameObject, descriptionObject);
 
         epic.setId(idObject);
@@ -140,11 +140,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             }
 
     } catch (IOException e) {
-            try {
-                throw new ManagerSaveException("Ошибка записи файла: ", fileTaskManager);
-            } catch (ManagerSaveException exception) {
-                System.out.println(exception.getDetailMessage());
-            }
+            final ManagerSaveException userIOException = new ManagerSaveException("Ошибка записи файла: ", fileTaskManager);
+            System.out.println(userIOException.getDetailMessage());
         }
     }
 
