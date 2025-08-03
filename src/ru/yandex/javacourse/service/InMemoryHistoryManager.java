@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 public class InMemoryHistoryManager implements HistoryManager {
 
     private final HashMap<Integer, Node<Task>> hashMapList = new HashMap<>();
-    private final LinkedListClass<Task> linkedList = new LinkedListClass<>();
+    private final CustomLinkedList<Task> linkedList = new CustomLinkedList<>();
 
 
     @Override
@@ -52,14 +52,23 @@ public class InMemoryHistoryManager implements HistoryManager {
             } else {
                 linkedList.tail = node.prev;
             }
-            LinkedListClass.size--;
+            linkedList.size--;
         }
     }
 
-    public static class LinkedListClass<T> {
+    public int getSize() {
+        return linkedList.size;
+    }
+
+    public void setSize(int size) {
+        linkedList.size = size;
+
+    }
+
+    public static class CustomLinkedList<T> {
         public Node<Task> head;
         public Node<Task> tail;
-        public static int size = 0;
+        public int size = 0;
 
         public Node linkLast(Task element) {
             final Node<Task> oldLast = tail;

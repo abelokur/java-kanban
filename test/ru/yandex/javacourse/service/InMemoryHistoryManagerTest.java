@@ -181,7 +181,7 @@ class InMemoryHistoryManagerTest {
         //given
         InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
 
-        InMemoryHistoryManager.LinkedListClass.size = 0;
+        inMemoryTaskManager.setHistoryManagerSize(0);
 
         final int QUANTITY = 20;
         Task[] tasks = new Task[QUANTITY];
@@ -195,7 +195,7 @@ class InMemoryHistoryManagerTest {
 
         //when
         List<Task> history = inMemoryTaskManager.getDefaultHistory();
-        int historyManagerSize = InMemoryHistoryManager.LinkedListClass.size;
+        int historyManagerSize = inMemoryTaskManager.getHistoryManagerSize();
 
         //then
         assertEquals(QUANTITY, historyManagerSize, "История посещений ОГРАНИЧЕНА по размеру");

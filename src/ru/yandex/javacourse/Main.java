@@ -1,12 +1,12 @@
 package ru.yandex.javacourse;
 
 import ru.yandex.javacourse.model.*;
+import ru.yandex.javacourse.service.InMemoryHistoryManager.CustomLinkedList;
 import ru.yandex.javacourse.service.InMemoryTaskManager;
-import ru.yandex.javacourse.service.InMemoryHistoryManager.LinkedListClass;
 
 import java.util.ArrayList;
 
-public record Main() {
+public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
@@ -79,7 +79,7 @@ public record Main() {
         }
 
 
-        LinkedListClass<Integer> linkedListClass = new LinkedListClass<Integer>();
+        CustomLinkedList<Integer> linkedListClass = new CustomLinkedList<Integer>();
 
         linkedListClass.linkLast(new Task("task1", "task1"));
         linkedListClass.linkLast(new Task("task2", "task2"));

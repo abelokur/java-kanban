@@ -2,7 +2,6 @@ package ru.yandex.javacourse.service;
 
 import java.util.HashMap;
 import java.util.List;
-
 import ru.yandex.javacourse.model.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -11,7 +10,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private HashMap<Integer, Epic> epicList = new HashMap<>();
 
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
 
     public List<Task> getDefaultHistory() {
         return historyManager.getDefaultHistory();
@@ -19,6 +18,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     public static int getId() {
         return id++;
+    }
+
+    public int getHistoryManagerSize() {
+        return historyManager.getSize();
+    }
+
+    public void setHistoryManagerSize(int size) {
+        historyManager.setSize(size);
     }
 
     // 2.a.Получение списка всех задач.
