@@ -1,12 +1,59 @@
 package ru.yandex.javacourse.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Epic extends Task {
     private HashMap<Integer, Subtask> subTaskList  = new HashMap<>();
+    private LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
+    }
+
+    public void setStartTime() {
+        this.setStartTime(getStartTime());
+    }
+
+    public  LocalDateTime getStartTime() {
+        LocalDateTime temp = null;
+        if (!subTaskList.isEmpty()) {
+            temp = subTaskList.get(0).getStartTime();
+            for (int i = 1; i <= subTaskList.size(); i++) {
+                if (temp.isAfter(subTaskList.get(1).getStartTime())) {
+                    temp = subTaskList.get(1).getStartTime();
+                }
+            }
+        }
+        return temp;
+    }
+
+    public Duration getDuration() {
+        Duration duration = Duration.ofMinutes(0);
+        for (Integer d : subTaskList.keySet()) {
+            duration.plus(subTaskList.get(d).getDuration());
+        }
+        return duration;
+    }
+
+    public void setDuration() {
+        this.setDuration(getDuration());
+    }
+
+    public void setEndTime() {
+        LocalDateTime temp = null;
+        for (Integer s : subTaskList.keySet()) {
+            if (temp.isBefore(subTaskList.get(s).getEndTime())) {
+                temp = subTaskList.get(s).getEndTime();
+            }
+        }
+        this.endTime = temp;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return this.endTime;
     }
 
     public void addSubTask(Subtask newSubtask) {
