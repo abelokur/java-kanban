@@ -4,10 +4,13 @@ import ru.yandex.javacourse.exception.ManagerSaveException;
 import ru.yandex.javacourse.model.*;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
 import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     File fileTaskManager;
+    final static DateTimeFormatter startTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public FileBackedTaskManager() {
     }
@@ -114,7 +117,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private void save() {
-        String head = "id,type,name,status,description,epic\n";
+        String head = "id,type,name,status,description,epic,duration,starttime\n";
 
         HashMap<Integer, Task> allTasks = super.getAllTasks();
         HashMap<Integer, Subtask> allSubTasks = super.getAllSubTasks();
@@ -146,11 +149,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     String toString(Task task) {
-        return task.getId() + "," + TypeTask.TASK + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + ",\n";
+        String strDuration = (task.getDuration() == null) ? "" : "" + task.getDuration().toMinutes();
+        String strStartTime = (task.getStartTime() ==  null) ? "" : "" + task.getStartTime().format(FileBackedTaskManager.startTimeFormat);
+        return task.getId() + "," + TypeTask.TASK + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + "," + strDuration/*task.getDuration().toMinutes()*/ + "," + strStartTime/*task.getStartTime()*/ +"\n";
     }
 
     String toString(Subtask subtask) {
-        return subtask.getId() + "," + TypeTask.SUBTASK + "," + subtask.getName() + "," + subtask.getStatus() + "," + subtask.getDescription() + "," + subtask.getEpic().getId() + "\n";
+        String strDuration = (subtask.getDuration() == null) ? "" : "" + subtask.getDuration().toMinutes();
+        String strStartTime = (subtask.getStartTime() ==  null) ? "" : "" + subtask.getStartTime().format(FileBackedTaskManager.startTimeFormat);
+        return subtask.getId() + "," + TypeTask.SUBTASK + "," + subtask.getName() + "," + subtask.getStatus() + "," + subtask.getDescription() + "," + subtask.getEpic().getId() + "," + strDuration + "," + strStartTime + "\n";
     }
 
     String toString(Epic epic) {

@@ -22,7 +22,13 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return startTime.plus(duration);
+        LocalDateTime returnValue = null;
+        try {
+            returnValue = startTime.plus(duration);
+        } catch (NullPointerException e) {
+            returnValue = null;
+        }
+        return returnValue;
     }
 
     public void setDuration(Duration duration) {
