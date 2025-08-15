@@ -11,7 +11,7 @@ public class Task {
     private String description;
     private int id;
     private Status status;
-    private Duration duration;
+    private Duration duration = Duration.ofMinutes(0);
     private LocalDateTime startTime;
 
     public Task(String name, String description) {
