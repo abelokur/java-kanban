@@ -2,6 +2,7 @@ package ru.yandex.javacourse.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Epic extends Task {
@@ -12,27 +13,28 @@ public class Epic extends Task {
         super(name, description);
     }
 
-    public void setStartTime() {
-        this.setStartTime(getStartTime());
+    public void setStartTime(LocalDateTime startTime) {
+        try {
+            if (super.getStartTime().isAfter(startTime)) {
+                super.setStartTime(startTime);
+            }
+        } catch (NullPointerException e) {
+            super.setStartTime(startTime);
+        }
     }
 
-    public  LocalDateTime getStartTime() {
-        LocalDateTime temp = null;
-        if (!subTaskList.isEmpty()) {
-            temp = subTaskList.get(0).getStartTime();
-            for (int i = 1; i <= subTaskList.size(); i++) {
-                if (temp.isAfter(subTaskList.get(1).getStartTime())) {
-                    temp = subTaskList.get(1).getStartTime();
-                }
-            }
-        }
-        return temp;
+    public LocalDateTime getStartTime() {
+        return super.getStartTime();
     }
 
     public Duration getDuration() {
         Duration duration = Duration.ofMinutes(0);
         for (Integer d : subTaskList.keySet()) {
-            duration.plus(subTaskList.get(d).getDuration());
+            try {
+                duration.plus(subTaskList.get(d).getDuration());
+            } catch (NullPointerException e) {
+                ;
+            }
         }
         return duration;
     }
@@ -135,6 +137,8 @@ public class Epic extends Task {
                 ", description='" + this.getDescription() + '\'' +
                 ", id=" + this.getId() +
                 ", status=" + this.getStatus() +
+                ", duration=" + this.getDuration() +
+                ", startTime=" + this.getStartTime() +
                 ", subTasks=" + subTaskList +
                 '}';
     }

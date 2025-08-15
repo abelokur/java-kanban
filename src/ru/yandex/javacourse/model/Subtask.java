@@ -25,6 +25,8 @@ public class Subtask extends Task {
 
     public void setEpic(Epic epic) {
         this.epic = epic;
+        epic.setStartTime(this.getStartTime());
+        epic.setDuration(this.getDuration());
     }
 
     @Override
@@ -34,6 +36,8 @@ public class Subtask extends Task {
                 ", description='" + this.getDescription() + '\'' +
                 ", id=" + this.getId() +
                 ", status=" + this.getStatus() +
+                ", duration=" + this.getDuration() +
+                ", startTime=" + this.getStartTime() +
                 '}';
     }
 }
