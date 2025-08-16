@@ -201,6 +201,20 @@ class InMemoryHistoryManagerTest {
         assertEquals(QUANTITY, historyManagerSize, "История посещений ОГРАНИЧЕНА по размеру");
     }
 
+    @Test
+    @DisplayName("Пустая история задач")
+    void test_Get_Default_History_Is_Empty() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        //when
+        boolean historyIsEmpty = inMemoryTaskManager.getDefaultHistory().isEmpty();
+
+        //then
+        assertTrue(historyIsEmpty, "История не пустая");
+
+    }
+
     static class Stub {
         public static InMemoryTaskManager getInMemoryTaskManager() {
             return new InMemoryTaskManager();
