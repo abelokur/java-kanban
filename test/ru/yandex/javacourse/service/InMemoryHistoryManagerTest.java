@@ -133,7 +133,6 @@ class InMemoryHistoryManagerTest {
 
         //when
         List<Task> history = inMemoryTaskManager.getDefaultHistory();
-        System.out.println(history);
 
         //then
         assertEquals(Stub.getHistoryManagerList_Tail(), history.toString(), "Если задачу посещали ранее, то в истории НЕ ОСТАЕТСЯ только последний её просмотр");
@@ -170,7 +169,7 @@ class InMemoryHistoryManagerTest {
 
         //when
         List<Task> history = inMemoryTaskManager.getDefaultHistory();
-        System.out.println(history);
+
         //then
         assertEquals(Stub.getHistoryManagerList_Many_Tasks_Add(), history.toString(), "Если задачу посещали ранее, то в истории НЕ ОСТАЕТСЯ только последний её просмотр");
     }
@@ -202,7 +201,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    @DisplayName("Пустая история задач")
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Пустая история задач")
     void test_Get_Default_History_Is_Empty() {
         //given
         InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
@@ -212,6 +211,91 @@ class InMemoryHistoryManagerTest {
 
         //then
         assertTrue(historyIsEmpty, "История не пустая");
+
+    }
+
+    @Test
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Удаление из истории: начало")
+    void test_Get_Duplicate_Begin() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Task task1 = new Task("Task1", "DESCRIPTION");
+        Task task2 = new Task("Task2", "DESCRIPTION");
+        Task task3 = new Task("Task3", "DESCRIPTION");
+
+        inMemoryTaskManager.createTasks(task1);
+        inMemoryTaskManager.createTasks(task2);
+        inMemoryTaskManager.createTasks(task3);
+
+        inMemoryTaskManager.getTask(task1.getId());
+        inMemoryTaskManager.getTask(task2.getId());
+        inMemoryTaskManager.getTask(task3.getId());
+
+        inMemoryTaskManager.removeTask(task1.getId());
+
+        //when
+        List<Task> history = inMemoryTaskManager.getDefaultHistory();
+
+
+        //then
+        assertEquals(Stub.getHistoryManagerList_Duplicate_Begin(), history.toString(), "Нет удаления из Истории - начало");
+
+    }
+
+    @Test
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Удаление из истории: середина")
+    void test_Get_Duplicate_Middle() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Task task1 = new Task("Task1", "DESCRIPTION");
+        Task task2 = new Task("Task2", "DESCRIPTION");
+        Task task3 = new Task("Task3", "DESCRIPTION");
+
+        inMemoryTaskManager.createTasks(task1);
+        inMemoryTaskManager.createTasks(task2);
+        inMemoryTaskManager.createTasks(task3);
+
+        inMemoryTaskManager.getTask(task1.getId());
+        inMemoryTaskManager.getTask(task2.getId());
+        inMemoryTaskManager.getTask(task3.getId());
+
+        inMemoryTaskManager.removeTask(task2.getId());
+
+        //when
+        List<Task> history = inMemoryTaskManager.getDefaultHistory();
+
+        //then
+        assertEquals(Stub.getHistoryManagerList_Duplicate_Middle(), history.toString(), "Нет удаления из Истории - середина");
+
+    }
+
+    @Test
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Удаление из истории: конец")
+    void test_Get_Duplicate_End() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Task task1 = new Task("Task1", "DESCRIPTION");
+        Task task2 = new Task("Task2", "DESCRIPTION");
+        Task task3 = new Task("Task3", "DESCRIPTION");
+
+        inMemoryTaskManager.createTasks(task1);
+        inMemoryTaskManager.createTasks(task2);
+        inMemoryTaskManager.createTasks(task3);
+
+        inMemoryTaskManager.getTask(task1.getId());
+        inMemoryTaskManager.getTask(task2.getId());
+        inMemoryTaskManager.getTask(task3.getId());
+
+        inMemoryTaskManager.removeTask(task3.getId());
+
+        //when
+        List<Task> history = inMemoryTaskManager.getDefaultHistory();
+
+        //then
+        assertEquals(Stub.getHistoryManagerList_Duplicate_End(), history.toString(), "Нет удаления из Истории - конец");
 
     }
 
@@ -240,6 +324,18 @@ class InMemoryHistoryManagerTest {
 
         public static String getHistoryManagerList_Many_Tasks_Add() {
             return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=null}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}]";
+        }
+
+        public static String getHistoryManagerList_Duplicate_Begin() {
+            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=null}]";
+        }
+
+        public static String getHistoryManagerList_Duplicate_Middle() {
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=null}]";
+        }
+
+        public static String getHistoryManagerList_Duplicate_End() {
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}]";
         }
     }
 }
