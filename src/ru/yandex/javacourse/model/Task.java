@@ -59,10 +59,6 @@ public class Task {
         return duration;
     }
 
-    public Duration getEpicDuration() {
-        return duration;
-    }
-
     public LocalDateTime getStartTime() {
         return startTime;
     }
