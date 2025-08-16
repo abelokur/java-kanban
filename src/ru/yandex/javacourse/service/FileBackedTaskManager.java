@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     File fileTaskManager;
-    final static DateTimeFormatter startTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    final DateTimeFormatter startTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public FileBackedTaskManager() {
     }
@@ -57,12 +57,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
                 if (typeObject == TypeTask.TASK && lineArray.length == 7) {
                     duration = Duration.ofMinutes(Long.parseLong(lineArray[5]));
-                    startTime = LocalDateTime.parse(lineArray[6], startTimeFormat);
+                    startTime = LocalDateTime.parse(lineArray[6], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
                 }
 
                 if (typeObject == TypeTask.SUBTASK && lineArray.length == 8) {
                     duration = Duration.ofMinutes(Long.parseLong(lineArray[6]));
-                    startTime = LocalDateTime.parse(lineArray[7], startTimeFormat);
+                    startTime = LocalDateTime.parse(lineArray[7], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
                 }
 
 
