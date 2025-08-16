@@ -63,10 +63,6 @@ public class Task {
         return startTime;
     }
 
-    public LocalDateTime getEpicStartTime() {
-        return startTime;
-    }
-
     public String getName() {
         return name;
     }
