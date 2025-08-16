@@ -2,7 +2,6 @@ package ru.yandex.javacourse.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.yandex.javacourse.model.Subtask;
 import ru.yandex.javacourse.model.Task;
 
 import java.util.List;
