@@ -9,17 +9,16 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskList = new HashMap<>();
     private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private HashMap<Integer, Epic> epicList = new HashMap<>();
-    private Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+    private Set<Task> sortedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
 
     public boolean isTaskOverlapping(Task taskChecking) {
-        for (Task task : prioritizedTasks) {
-            if (taskChecking.isOverlapping(task)) {
-                return true;
-            }
+        List<Task> listOfTasks = sortedTasks.stream().filter(taskChecking::isOverlapping).toList();
+        if (listOfTasks.isEmpty()) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public List<Task> getDefaultHistory() {
@@ -118,11 +117,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTasks(Task task) {
         taskList.put(task.getId(), task);
+        if (!isTaskOverlapping(task)) {
+            sortedTasks.add(task);
+        }
     }
 
     @Override
     public void createSubtasks(Subtask subtask) {
         subtaskList.put(subtask.getId(), subtask);
+        if (!isTaskOverlapping(subtask)) {
+            sortedTasks.add(subtask);
+        }
     }
 
     @Override
@@ -134,11 +139,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         taskList.put(task.getId(), task);
+        if (!isTaskOverlapping(task)) {
+            sortedTasks.add(task);
+        }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
         subtaskList.put(subtask.getId(), subtask);
+        if (!isTaskOverlapping(subtask)) {
+            sortedTasks.add(subtask);
+        }
     }
 
     @Override
@@ -151,6 +162,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTask(int id) {
         historyManager.remove(id);
         taskList.remove(id);
+        sortedTasks.remove(taskList.get(id));
     }
 
     @Override
@@ -166,6 +178,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         historyManager.remove(id);
         subtaskList.remove(id);
+        sortedTasks.remove(subtask);
     }
 
     @Override
