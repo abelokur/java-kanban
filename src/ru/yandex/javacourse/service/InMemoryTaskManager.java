@@ -117,7 +117,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTasks(Task task) {
         taskList.put(task.getId(), task);
-        if (!isTaskOverlapping(task)) {
+        if (!isTaskOverlapping(task) && task.isStartTime()) {
             sortedTasks.add(task);
         }
     }
@@ -125,7 +125,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createSubtasks(Subtask subtask) {
         subtaskList.put(subtask.getId(), subtask);
-        if (!isTaskOverlapping(subtask)) {
+        if (!isTaskOverlapping(subtask) && subtask.isStartTime()) {
             sortedTasks.add(subtask);
         }
     }
@@ -139,7 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         taskList.put(task.getId(), task);
-        if (!isTaskOverlapping(task)) {
+        if (!isTaskOverlapping(task) && task.isStartTime()) {
             sortedTasks.add(task);
         }
     }
@@ -147,7 +147,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask) {
         subtaskList.put(subtask.getId(), subtask);
-        if (!isTaskOverlapping(subtask)) {
+        if (!isTaskOverlapping(subtask) && subtask.isStartTime()) {
             sortedTasks.add(subtask);
         }
     }
