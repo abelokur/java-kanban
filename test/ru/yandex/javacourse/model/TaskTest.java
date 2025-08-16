@@ -33,7 +33,7 @@ class TaskTest {
         //given
         Task task1 = new Task("First Task", "Interval is overlapping with Second Task");
         Task task2 = new Task("Second Task", "Interval is overlapping with First Task");
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formater = Stub.formater;
 
         //when
         task1.setStartTime(LocalDateTime.parse("16.08.2025 08:25", formater));
@@ -54,7 +54,7 @@ class TaskTest {
         //given
         Task task1 = new Task("First Task", "Interval is not overlapping with Second Task");
         Task task2 = new Task("Second Task", "Interval is not overlapping with First Task");
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formater = Stub.formater;
 
         //when
         task1.setStartTime(LocalDateTime.parse("16.08.2025 08:25", formater));
@@ -75,7 +75,7 @@ class TaskTest {
         //given
         Task task1 = new Task("First Task", "Interval is not overlapping with Second Task");
         Task task2 = new Task("Second Task", "Interval is not overlapping with First Task");
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formater = Stub.formater;
 
         //when
         task1.setStartTime(LocalDateTime.parse("16.08.2025 08:25", formater));
@@ -87,6 +87,10 @@ class TaskTest {
         //then
         assertTrue(!task1.isOverlapping(task2), "Задачи пересекаются");
 
+    }
+
+    static class Stub {
+        private static DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     }
 
 }
