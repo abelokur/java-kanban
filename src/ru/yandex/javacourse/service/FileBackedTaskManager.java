@@ -7,7 +7,6 @@ import java.io.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
@@ -175,7 +174,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     String toString(Task task) {
 
         String strDuration  = (task.getDuration() == null || task.getDuration() == Duration.ofMinutes(0)) ? "" : "" + task.getDuration().toMinutes();
-        String strStartTime = (task.getStartTime() ==  null) ? "" : "" + task.getStartTime().format(FileBackedTaskManager.startTimeFormat);
+        String strStartTime = (task.getStartTime() ==  null) ? "" : "" + task.getStartTime().format(startTimeFormat);
 
         return task.getId() + "," +
                TypeTask.TASK + "," +
@@ -183,13 +182,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                task.getStatus() + "," +
                task.getDescription() + "," +
                strDuration + "," +
-               strStartTime +"\n";
+               strStartTime + "\n";
     }
 
     String toString(Subtask subtask) {
 
         String strDuration  = (subtask.getDuration() == null || subtask.getDuration() == Duration.ofMinutes(0)) ? "" : "" + subtask.getDuration().toMinutes();
-        String strStartTime = (subtask.getStartTime() ==  null) ? "" : "" + subtask.getStartTime().format(FileBackedTaskManager.startTimeFormat);
+        String strStartTime = (subtask.getStartTime() ==  null) ? "" : "" + subtask.getStartTime().format(startTimeFormat);
 
         return subtask.getId() + "," +
                TypeTask.SUBTASK + "," +
