@@ -2,9 +2,12 @@ package ru.yandex.javacourse.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import ru.yandex.javacourse.service.InMemoryTaskManager;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class Task {
     private String name;
@@ -19,6 +22,15 @@ public class Task {
         this.description = description;
         this.id = InMemoryTaskManager.getId();
         this.status = Status.NEW;
+    }
+
+    public boolean isOverlappingDuration(Task task) {
+        boolean isOverlapping = true;
+        if (Duration.between(this.getEndTime(), task.getStartTime()).get(SECONDS) >= 0 ||
+            Duration.between(task.getEndTime(), this.getStartTime()).get(SECONDS) >= 0 ) {
+            isOverlapping = false;
+        }
+        return isOverlapping;
     }
 
     public LocalDateTime getEndTime() {
