@@ -206,26 +206,26 @@ class InMemoryHistoryManagerTest {
             return new InMemoryTaskManager();
         }
         public static String getTaskManagerString() {
-            return "Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=null, startTime=null}";
+            return "Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}";
         }
         public static String getHistoryManagerList() {
-            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=null, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=null, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=null, startTime=null}]";
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerListOneTask() {
-            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=null, startTime=null}]";
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerList_Head() {
-            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=null, startTime=null}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=null, startTime=null}]";
+            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerList_Tail() {
-            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=null, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=null, startTime=null}]";
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerList_Many_Tasks_Add() {
-            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=null, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=null, startTime=null}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=null, startTime=null}]";
+            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=null}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}]";
         }
     }
 }
