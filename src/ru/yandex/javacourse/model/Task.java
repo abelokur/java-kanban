@@ -2,7 +2,6 @@ package ru.yandex.javacourse.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import ru.yandex.javacourse.service.InMemoryTaskManager;
@@ -31,7 +30,7 @@ public class Task {
     public boolean isOverlapping(Task task) {
         boolean isOverlapping = true;
         if (Duration.between(this.getEndTime(), task.getStartTime()).get(SECONDS) >= 0 ||
-            Duration.between(task.getEndTime(), this.getStartTime()).get(SECONDS) >= 0 ) {
+            Duration.between(task.getEndTime(), this.getStartTime()).get(SECONDS) >= 0) {
             isOverlapping = false;
         }
         return isOverlapping;
