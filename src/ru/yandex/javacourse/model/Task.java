@@ -24,7 +24,7 @@ public class Task {
         this.status = Status.NEW;
     }
 
-    public boolean isOverlappingDuration(Task task) {
+    public boolean isOverlapping(Task task) {
         boolean isOverlapping = true;
         if (Duration.between(this.getEndTime(), task.getStartTime()).get(SECONDS) >= 0 ||
             Duration.between(task.getEndTime(), this.getStartTime()).get(SECONDS) >= 0 ) {

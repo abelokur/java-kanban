@@ -1,7 +1,7 @@
 package ru.yandex.javacourse.service;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import ru.yandex.javacourse.model.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -9,8 +9,18 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskList = new HashMap<>();
     private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private HashMap<Integer, Epic> epicList = new HashMap<>();
+    private Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
+
+    public boolean isTaskOverlapping(Task taskChecking) {
+        for (Task task : prioritizedTasks) {
+            if (taskChecking.isOverlapping(task)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public List<Task> getDefaultHistory() {
         return historyManager.getDefaultHistory();
