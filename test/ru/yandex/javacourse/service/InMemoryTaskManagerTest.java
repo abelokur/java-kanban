@@ -199,9 +199,9 @@ class InMemoryTaskManagerTest {
         List<Task> prioritizedTasksAfterRemoveSubTask = inMemoryTaskManager.getPrioritizedTasks();
 
         //then
-        assertEquals(Stub.getPrioritizedTasksNoSorted(), prioritizedTasks.toString(),  "Есть сортировка");
-            assertEquals(Stub.getPrioritizedTasksSorted(), prioritizedTasksAfterAddSubTask.toString(),  "Нет сортировки");
-        assertEquals(Stub.getPrioritizedTasksNoSorted(), prioritizedTasksAfterRemoveSubTask.toString(),  "Нет сортировки");
+        assertEquals(Stub.getPrioritizedTasksNoSorted(subtask1, subtask2), prioritizedTasks.toString(),  "Есть сортировка");
+            assertEquals(Stub.getPrioritizedTasksSorted(subtask1, subtask2, subtask3), prioritizedTasksAfterAddSubTask.toString(),  "Нет сортировки subtask1, subtask2, subtask3");
+        assertEquals(Stub.getPrioritizedTasksNoSorted(subtask1, subtask2), prioritizedTasksAfterRemoveSubTask.toString(),  "Нет сортировки subtask1, subtask2");
 
 
     }
@@ -216,7 +216,7 @@ class InMemoryTaskManagerTest {
         public static Subtask getSubtask(String name, String description) {
             return new Subtask(name, description);
         }
-        public static String getPrioritizedTasksNoSorted() {return "[Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=2025-08-17T20:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=2025-08-17T22:00}]";}
-        public static String getPrioritizedTasksSorted() {return "[Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=2025-08-17T20:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=3, status=NEW, duration=PT0S, startTime=2025-08-17T21:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=2025-08-17T22:00}]";}
+        public static String getPrioritizedTasksNoSorted(Subtask subtask1, Subtask subtask2) {return "[Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask2.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T20:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask1.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T22:00}]";}
+        public static String getPrioritizedTasksSorted(Subtask subtask1, Subtask subtask2, Subtask subtask3) {return "[Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask2.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T20:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask3.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T21:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask1.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T22:00}]";}
     }
 }
