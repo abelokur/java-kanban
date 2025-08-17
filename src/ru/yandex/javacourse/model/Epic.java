@@ -32,7 +32,6 @@ public class Epic extends Task {
             try {
                 duration.plus(subTaskList.get(d).getDuration());
             } catch (NullPointerException e) {
-                ;
             }
         }
         return duration;
