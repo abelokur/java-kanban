@@ -13,13 +13,16 @@ public class Epic extends Task {
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        try {
-            if (super.getStartTime().isAfter(startTime)) {
-                super.setStartTime(startTime);
+        LocalDateTime minStartTime = null;
+        for (Subtask subtask : subTaskList.values()) {
+            LocalDateTime subStartTime = subtask.getStartTime();
+            if (subStartTime != null) {
+                if (minStartTime == null || subStartTime.isBefore(minStartTime)) {
+                    minStartTime = subStartTime;
+                }
             }
-        } catch (NullPointerException e) {
-            super.setStartTime(startTime);
         }
+        super.setStartTime(minStartTime);
     }
 
     public LocalDateTime getStartTime() {
@@ -60,9 +63,11 @@ public class Epic extends Task {
         subTaskList.put(newSubtask.getId(), newSubtask);
         newSubtask.setEpic(this);
         this.setStatus();
+        this.setStartTime(newSubtask.getStartTime());
     }
 
     public void removeSubTask(int id) {
+        this.setStartTime(subTaskList.get(id).getStartTime());
         subTaskList.remove(id);
     }
 
