@@ -12,7 +12,7 @@ public class Epic extends Task {
         super(name, description);
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime() {
         LocalDateTime minStartTime = null;
         for (Subtask subtask : subTaskList.values()) {
             LocalDateTime subStartTime = subtask.getStartTime();
@@ -63,12 +63,12 @@ public class Epic extends Task {
         subTaskList.put(newSubtask.getId(), newSubtask);
         newSubtask.setEpic(this);
         this.setStatus();
-        this.setStartTime(newSubtask.getStartTime());
+        this.setStartTime();
     }
 
     public void removeSubTask(int id) {
-        this.setStartTime(subTaskList.get(id).getStartTime());
         subTaskList.remove(id);
+        this.setStartTime();
     }
 
     public HashMap<Integer, Subtask> getSubTaskList() {
