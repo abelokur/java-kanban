@@ -13,7 +13,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
 
-    public List<Task>getPrioritizedTasks() {
+    public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(sortedTasks);
     }
 
