@@ -13,6 +13,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
 
+    public List<Task>getPrioritizedTasks() {
+        return new ArrayList<>(sortedTasks);
+    }
+
     public boolean isTaskOverlapping(Task taskChecking) {
         List<Task> listOfTasks = sortedTasks.stream().filter(taskChecking::isOverlapping).toList();
         if (listOfTasks.isEmpty()) {
