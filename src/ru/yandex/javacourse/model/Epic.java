@@ -30,18 +30,17 @@ public class Epic extends Task {
     }
 
     public Duration getDuration() {
-        Duration duration = Duration.ofMinutes(0);
-        for (Integer d : subTaskList.keySet()) {
-            try {
-                duration.plus(subTaskList.get(d).getDuration());
-            } catch (NullPointerException e) {
+        Duration total = Duration.ofMinutes(0);
+        for (Subtask subtask : subTaskList.values()) {
+            if (subtask.getDuration() != null) {
+                total = total.plus(subtask.getDuration());
             }
         }
-        return duration;
+        return total;
     }
 
-    public void setDuration() {
-        this.setDuration(getDuration());
+    public void setDuration(Duration duration) {
+        super.setDuration(duration);
     }
 
     public void setEndTime() {
@@ -64,11 +63,14 @@ public class Epic extends Task {
         newSubtask.setEpic(this);
         this.setStatus();
         this.setStartTime();
+        this.setDuration(this.getDuration());
     }
 
     public void removeSubTask(int id) {
         subTaskList.remove(id);
+        this.setStatus();
         this.setStartTime();
+        this.setDuration(this.getDuration());
     }
 
     public HashMap<Integer, Subtask> getSubTaskList() {
