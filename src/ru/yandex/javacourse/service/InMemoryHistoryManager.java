@@ -7,7 +7,6 @@ import ru.yandex.javacourse.model.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
@@ -86,7 +85,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             ArrayList<Task> arrayList = new ArrayList<>();
             Node<Task> start = head;
             if (start == null)
-                throw new NoSuchElementException();
+                return arrayList;
             while (start != null) {
                 arrayList.add(start.data);
                 start = start.next;

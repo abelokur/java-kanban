@@ -4,10 +4,14 @@ import ru.yandex.javacourse.exception.ManagerSaveException;
 import ru.yandex.javacourse.model.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     File fileTaskManager;
+    final DateTimeFormatter startTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public FileBackedTaskManager() {
     }
@@ -43,14 +47,31 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 Status statusObject = Status.valueOf(lineArray[3]);
                 String descriptionObject = lineArray[4];
 
-                int epicObjectId = getEpicObjectId(lineArray);
+                int epicObjectId = -1;
+
+                epicObjectId = getEpicObjectId(lineArray);
+
+                Duration duration = Duration.ofMinutes(0);
+
+                LocalDateTime startTime = null;
+
+                if (typeObject == TypeTask.TASK && lineArray.length == 7) {
+                    duration = Duration.ofMinutes(Long.parseLong(lineArray[5]));
+                    startTime = LocalDateTime.parse(lineArray[6], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+                }
+
+                if (typeObject == TypeTask.SUBTASK && lineArray.length == 8) {
+                    duration = Duration.ofMinutes(Long.parseLong(lineArray[6]));
+                    startTime = LocalDateTime.parse(lineArray[7], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+                }
+
 
                 switch (typeObject) {
                     case TypeTask.TASK:
-                        loadTask(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject);
+                        loadTask(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject, duration, startTime);
                         break;
                     case TypeTask.SUBTASK:
-                        loadSubtask(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject, epicObjectId);
+                        loadSubtask(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject, epicObjectId, duration, startTime);
                         break;
                     case TypeTask.EPIC:
                         loadEpic(fileBackedTaskManager, idObject, nameObject, statusObject, descriptionObject);
@@ -67,21 +88,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return fileBackedTaskManager;
     }
 
-    private static void loadTask(FileBackedTaskManager fileBackedTaskManager, int idObject, String nameObject, Status statusObject, String descriptionObject) {
+    private static void loadTask(FileBackedTaskManager fileBackedTaskManager, int idObject, String nameObject, Status statusObject, String descriptionObject, Duration duration, LocalDateTime startTime) {
         Task task = new Task(nameObject, descriptionObject);
 
         task.setId(idObject);
         task.setStatus(statusObject);
+        task.setDuration(duration);
+        task.setStartTime(startTime);
 
         fileBackedTaskManager.createTasks(task);
     }
 
-    private static void loadSubtask(FileBackedTaskManager fileBackedTaskManager, int idObject, String nameObject, Status statusObject, String descriptionObject, int epicObjectId) {
+    private static void loadSubtask(FileBackedTaskManager fileBackedTaskManager, int idObject, String nameObject, Status statusObject, String descriptionObject, int epicObjectId, Duration duration, LocalDateTime startTime) {
         Subtask subtask = new Subtask(nameObject, descriptionObject);
 
         subtask.setId(idObject);
         subtask.setStatus(statusObject);
         subtask.setEpic(fileBackedTaskManager.getEpic(epicObjectId));
+        subtask.setDuration(duration);
+        subtask.setStartTime(startTime);
 
         // в файл эпики всегда записываем до подзадач, соответственно эпики создаются раньше подзадач
         Epic addEpic = fileBackedTaskManager.getEpic(epicObjectId);
@@ -106,15 +131,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private static int getEpicObjectId(String[] lineArray) {
+        final int sufficientArrayLength = 6;
         int epicObjectId = -1;
-        if (lineArray.length == 6) {
+        if (lineArray.length >= sufficientArrayLength) {
             epicObjectId = Integer.parseInt(lineArray[5]);
         }
         return epicObjectId;
     }
 
     private void save() {
-        String head = "id,type,name,status,description,epic\n";
+        String head = "id,type,name,status,description,epic,duration,starttime\n";
 
         HashMap<Integer, Task> allTasks = super.getAllTasks();
         HashMap<Integer, Subtask> allSubTasks = super.getAllSubTasks();
@@ -146,15 +172,40 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     String toString(Task task) {
-        return task.getId() + "," + TypeTask.TASK + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + ",\n";
+
+        String strDuration  = (task.getDuration() == null || task.getDuration() == Duration.ofMinutes(0)) ? "" : "" + task.getDuration().toMinutes();
+        String strStartTime = (task.getStartTime() ==  null) ? "" : "" + task.getStartTime().format(startTimeFormat);
+
+        return task.getId() + "," +
+               TypeTask.TASK + "," +
+               task.getName() + "," +
+               task.getStatus() + "," +
+               task.getDescription() + "," +
+               strDuration + "," +
+               strStartTime + "\n";
     }
 
     String toString(Subtask subtask) {
-        return subtask.getId() + "," + TypeTask.SUBTASK + "," + subtask.getName() + "," + subtask.getStatus() + "," + subtask.getDescription() + "," + subtask.getEpic().getId() + "\n";
+
+        String strDuration  = (subtask.getDuration() == null || subtask.getDuration() == Duration.ofMinutes(0)) ? "" : "" + subtask.getDuration().toMinutes();
+        String strStartTime = (subtask.getStartTime() ==  null) ? "" : "" + subtask.getStartTime().format(startTimeFormat);
+
+        return subtask.getId() + "," +
+               TypeTask.SUBTASK + "," +
+               subtask.getName() + "," +
+               subtask.getStatus() + "," +
+               subtask.getDescription() + "," +
+               subtask.getEpic().getId() + "," +
+               strDuration + "," +
+               strStartTime + "\n";
     }
 
     String toString(Epic epic) {
-        return epic.getId() + "," + TypeTask.EPIC + "," + epic.getName() + "," + epic.getStatus() + "," + epic.getDescription() + ",\n";
+        return epic.getId() + "," +
+               TypeTask.EPIC + "," +
+               epic.getName() + "," +
+               epic.getStatus() + "," +
+               epic.getDescription() + ",\n";
     }
 
     @Override

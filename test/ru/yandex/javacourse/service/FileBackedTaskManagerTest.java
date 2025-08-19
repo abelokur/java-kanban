@@ -237,8 +237,6 @@ public class FileBackedTaskManagerTest {
 
         inMemoryTaskManager.createSubtasks(subtask);
 
-
-
         //when
         int subtaskId = subtask.getId();
         subtask.setId(subtaskId + 1001); // При вызове сеттеров необходимо проверять добавлена ли задача в Эпик
@@ -284,8 +282,6 @@ public class FileBackedTaskManagerTest {
             }
             return allObjects.toString();
         }
-
-
 
     }
 }

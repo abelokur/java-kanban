@@ -1,22 +1,76 @@
 package ru.yandex.javacourse.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Epic extends Task {
     private HashMap<Integer, Subtask> subTaskList  = new HashMap<>();
+    private LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
+    }
+
+    public void setStartTime() {
+        LocalDateTime minStartTime = null;
+        for (Subtask subtask : subTaskList.values()) {
+            LocalDateTime subStartTime = subtask.getStartTime();
+            if (subStartTime != null) {
+                if (minStartTime == null || subStartTime.isBefore(minStartTime)) {
+                    minStartTime = subStartTime;
+                }
+            }
+        }
+        super.setStartTime(minStartTime);
+    }
+
+    public LocalDateTime getStartTime() {
+        return super.getStartTime();
+    }
+
+    public Duration getDuration() {
+        Duration total = Duration.ofMinutes(0);
+        for (Subtask subtask : subTaskList.values()) {
+            if (subtask.getDuration() != null) {
+                total = total.plus(subtask.getDuration());
+            }
+        }
+        return total;
+    }
+
+    public void setDuration(Duration duration) {
+        super.setDuration(duration);
+    }
+
+    public void setEndTime() {
+        LocalDateTime temp = null;
+        for (Integer s : subTaskList.keySet()) {
+            if (temp.isBefore(subTaskList.get(s).getEndTime())) {
+                temp = subTaskList.get(s).getEndTime();
+            }
+        }
+        this.endTime = temp;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return this.endTime;
     }
 
     public void addSubTask(Subtask newSubtask) {
         subTaskList.put(newSubtask.getId(), newSubtask);
         newSubtask.setEpic(this);
         this.setStatus();
+        this.setStartTime();
+        this.setDuration(this.getDuration());
     }
 
     public void removeSubTask(int id) {
         subTaskList.remove(id);
+        this.setStatus();
+        this.setStartTime();
+        this.setDuration(this.getDuration());
     }
 
     public HashMap<Integer, Subtask> getSubTaskList() {
@@ -88,6 +142,8 @@ public class Epic extends Task {
                 ", description='" + this.getDescription() + '\'' +
                 ", id=" + this.getId() +
                 ", status=" + this.getStatus() +
+                ", duration=" + this.getDuration() +
+                ", startTime=" + this.getStartTime() +
                 ", subTasks=" + subTaskList +
                 '}';
     }

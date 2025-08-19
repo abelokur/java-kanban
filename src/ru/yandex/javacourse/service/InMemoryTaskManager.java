@@ -1,7 +1,7 @@
 package ru.yandex.javacourse.service;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import ru.yandex.javacourse.model.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -9,8 +9,21 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskList = new HashMap<>();
     private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private HashMap<Integer, Epic> epicList = new HashMap<>();
+    private Set<Task> sortedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
+
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(sortedTasks);
+    }
+
+    public boolean isTaskOverlapping(Task taskChecking) {
+        List<Task> listOfTasks = sortedTasks.stream().filter(taskChecking::isOverlapping).toList();
+        if (listOfTasks.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 
     public List<Task> getDefaultHistory() {
         return historyManager.getDefaultHistory();
@@ -108,11 +121,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTasks(Task task) {
         taskList.put(task.getId(), task);
+        if (!isTaskOverlapping(task) && task.isStartTime()) {
+            sortedTasks.add(task);
+        }
     }
 
     @Override
     public void createSubtasks(Subtask subtask) {
         subtaskList.put(subtask.getId(), subtask);
+        if (!isTaskOverlapping(subtask) && subtask.isStartTime()) {
+            sortedTasks.add(subtask);
+        }
     }
 
     @Override
@@ -124,11 +143,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         taskList.put(task.getId(), task);
+        if (!isTaskOverlapping(task) && task.isStartTime()) {
+            sortedTasks.add(task);
+        }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
         subtaskList.put(subtask.getId(), subtask);
+        if (!isTaskOverlapping(subtask) && subtask.isStartTime()) {
+            sortedTasks.add(subtask);
+        }
     }
 
     @Override
@@ -141,6 +166,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTask(int id) {
         historyManager.remove(id);
         taskList.remove(id);
+        sortedTasks.remove(taskList.get(id));
     }
 
     @Override
@@ -156,6 +182,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         historyManager.remove(id);
         subtaskList.remove(id);
+        sortedTasks.remove(subtask);
     }
 
     @Override

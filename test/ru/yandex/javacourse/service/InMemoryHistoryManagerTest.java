@@ -2,7 +2,6 @@ package ru.yandex.javacourse.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.yandex.javacourse.model.Subtask;
 import ru.yandex.javacourse.model.Task;
 
 import java.util.List;
@@ -133,7 +132,6 @@ class InMemoryHistoryManagerTest {
 
         //when
         List<Task> history = inMemoryTaskManager.getDefaultHistory();
-        System.out.println(history);
 
         //then
         assertEquals(Stub.getHistoryManagerList_Tail(), history.toString(), "Если задачу посещали ранее, то в истории НЕ ОСТАЕТСЯ только последний её просмотр");
@@ -170,7 +168,7 @@ class InMemoryHistoryManagerTest {
 
         //when
         List<Task> history = inMemoryTaskManager.getDefaultHistory();
-        System.out.println(history);
+
         //then
         assertEquals(Stub.getHistoryManagerList_Many_Tasks_Add(), history.toString(), "Если задачу посещали ранее, то в истории НЕ ОСТАЕТСЯ только последний её просмотр");
     }
@@ -201,31 +199,142 @@ class InMemoryHistoryManagerTest {
         assertEquals(QUANTITY, historyManagerSize, "История посещений ОГРАНИЧЕНА по размеру");
     }
 
+    @Test
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Пустая история задач")
+    void test_Get_Default_History_Is_Empty() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        //when
+        boolean historyIsEmpty = inMemoryTaskManager.getDefaultHistory().isEmpty();
+
+        //then
+        assertTrue(historyIsEmpty, "История не пустая");
+
+    }
+
+    @Test
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Удаление из истории: начало")
+    void test_Get_Duplicate_Begin() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Task task1 = new Task("Task1", "DESCRIPTION");
+        Task task2 = new Task("Task2", "DESCRIPTION");
+        Task task3 = new Task("Task3", "DESCRIPTION");
+
+        inMemoryTaskManager.createTasks(task1);
+        inMemoryTaskManager.createTasks(task2);
+        inMemoryTaskManager.createTasks(task3);
+
+        inMemoryTaskManager.getTask(task1.getId());
+        inMemoryTaskManager.getTask(task2.getId());
+        inMemoryTaskManager.getTask(task3.getId());
+
+        inMemoryTaskManager.removeTask(task1.getId());
+
+        //when
+        List<Task> history = inMemoryTaskManager.getDefaultHistory();
+
+
+        //then
+        assertEquals(Stub.getHistoryManagerList_Duplicate_Begin(task2.getId(), task3.getId()), history.toString(), "Нет удаления из Истории - начало");
+
+    }
+
+    @Test
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Удаление из истории: середина")
+    void test_Get_Duplicate_Middle() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Task task1 = new Task("Task1", "DESCRIPTION");
+        Task task2 = new Task("Task2", "DESCRIPTION");
+        Task task3 = new Task("Task3", "DESCRIPTION");
+
+        inMemoryTaskManager.createTasks(task1);
+        inMemoryTaskManager.createTasks(task2);
+        inMemoryTaskManager.createTasks(task3);
+
+        inMemoryTaskManager.getTask(task1.getId());
+        inMemoryTaskManager.getTask(task2.getId());
+        inMemoryTaskManager.getTask(task3.getId());
+
+        inMemoryTaskManager.removeTask(task2.getId());
+
+        //when
+        List<Task> history = inMemoryTaskManager.getDefaultHistory();
+
+        //then
+        assertEquals(Stub.getHistoryManagerList_Duplicate_Middle(task1.getId(), task3.getId()), history.toString(), "Нет удаления из Истории - середина");
+
+    }
+
+    @Test
+    @DisplayName("Для HistoryManager — тесты для всех методов интерфейса - Удаление из истории: конец")
+    void test_Get_Duplicate_End() {
+        //given
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Task task1 = new Task("Task1", "DESCRIPTION");
+        Task task2 = new Task("Task2", "DESCRIPTION");
+        Task task3 = new Task("Task3", "DESCRIPTION");
+
+        inMemoryTaskManager.createTasks(task1);
+        inMemoryTaskManager.createTasks(task2);
+        inMemoryTaskManager.createTasks(task3);
+
+        inMemoryTaskManager.getTask(task1.getId());
+        inMemoryTaskManager.getTask(task2.getId());
+        inMemoryTaskManager.getTask(task3.getId());
+
+        inMemoryTaskManager.removeTask(task3.getId());
+
+        //when
+        List<Task> history = inMemoryTaskManager.getDefaultHistory();
+
+        //then
+        assertEquals(Stub.getHistoryManagerList_Duplicate_End(task1.getId(), task2.getId()), history.toString(), "Нет удаления из Истории - конец");
+
+    }
+
     static class Stub {
         public static InMemoryTaskManager getInMemoryTaskManager() {
             return new InMemoryTaskManager();
         }
         public static String getTaskManagerString() {
-            return "Task{name='Task1', description='DESCRIPTION', id=0, status=NEW}";
+            return "Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}";
         }
         public static String getHistoryManagerList() {
-            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW}]";
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerListOneTask() {
-            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW}]";
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerList_Head() {
-            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW}]";
+            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerList_Tail() {
-            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW}]";
+            return "[Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}]";
         }
 
         public static String getHistoryManagerList_Many_Tasks_Add() {
-            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW}]";
+            return "[Task{name='Task2', description='DESCRIPTION', id=1, status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=2, status=NEW, duration=PT0S, startTime=null}, Task{name='Task1', description='DESCRIPTION', id=0, status=NEW, duration=PT0S, startTime=null}]";
+        }
+
+        public static String getHistoryManagerList_Duplicate_Begin(int idTask2, int idTask3) {
+            return "[Task{name='Task2', description='DESCRIPTION', id=" + idTask2 + ", status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=" + idTask3 + ", status=NEW, duration=PT0S, startTime=null}]";
+        }
+
+        public static String getHistoryManagerList_Duplicate_Middle(int idTask1, int idTask3) {
+            return "[Task{name='Task1', description='DESCRIPTION', id=" + idTask1 + ", status=NEW, duration=PT0S, startTime=null}, Task{name='Task3', description='DESCRIPTION', id=" + idTask3 + ", status=NEW, duration=PT0S, startTime=null}]";
+        }
+
+        public static String getHistoryManagerList_Duplicate_End(int idTask1, int idTask2) {
+            return "[Task{name='Task1', description='DESCRIPTION', id=" + idTask1 + ", status=NEW, duration=PT0S, startTime=null}, Task{name='Task2', description='DESCRIPTION', id=" + idTask2 + ", status=NEW, duration=PT0S, startTime=null}]";
         }
     }
 }

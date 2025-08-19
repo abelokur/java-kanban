@@ -6,7 +6,10 @@ import ru.yandex.javacourse.model.Epic;
 import ru.yandex.javacourse.model.Subtask;
 import ru.yandex.javacourse.model.Task;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -159,6 +162,50 @@ class InMemoryTaskManagerTest {
 
     }
 
+    @Test
+    @DisplayName("InMemoryTaskManager сортировка не пересчитывается каждый раз, а поддерживается при добавлении/удалении")
+    void test_Get_Prioritized_Tasks() {
+        //given
+        final DateTimeFormatter startTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+        InMemoryTaskManager inMemoryTaskManager = Stub.getInMemoryTaskManager();
+
+        Epic epic = new Epic("Test add and get Epic", "DESCRIPTION_EPIC");
+        inMemoryTaskManager.createEpics(epic);
+
+        Subtask subtask1 = Stub.getSubtask("Test add and get Subtask", "DESCRIPTION");
+        subtask1.setStartTime(LocalDateTime.parse("17.08.2025 22:00", startTimeFormat));
+        inMemoryTaskManager.createSubtasks(subtask1);
+
+        epic.addSubTask(subtask1);
+
+        Subtask subtask2 = Stub.getSubtask("Test add and get Subtask", "DESCRIPTION");
+        subtask2.setStartTime(LocalDateTime.parse("17.08.2025 20:00", startTimeFormat));
+        inMemoryTaskManager.createSubtasks(subtask2);
+
+        epic.addSubTask(subtask2);
+
+        //when
+        List<Task> prioritizedTasks = inMemoryTaskManager.getPrioritizedTasks();
+        prioritizedTasks = inMemoryTaskManager.getPrioritizedTasks(); // сортировка не пересчитывается каждый раз
+
+        Subtask subtask3 = Stub.getSubtask("Test add and get Subtask", "DESCRIPTION");
+        subtask3.setStartTime(LocalDateTime.parse("17.08.2025 21:00", startTimeFormat));
+        inMemoryTaskManager.createSubtasks(subtask3);
+
+        List<Task> prioritizedTasksAfterAddSubTask = inMemoryTaskManager.getPrioritizedTasks();
+
+        inMemoryTaskManager.removeSubtask(subtask3.getId());
+        List<Task> prioritizedTasksAfterRemoveSubTask = inMemoryTaskManager.getPrioritizedTasks();
+
+        //then
+        assertEquals(Stub.getPrioritizedTasksNoSorted(subtask1, subtask2), prioritizedTasks.toString(),  "Есть сортировка");
+            assertEquals(Stub.getPrioritizedTasksSorted(subtask1, subtask2, subtask3), prioritizedTasksAfterAddSubTask.toString(),  "Нет сортировки subtask1, subtask2, subtask3");
+        assertEquals(Stub.getPrioritizedTasksNoSorted(subtask1, subtask2), prioritizedTasksAfterRemoveSubTask.toString(),  "Нет сортировки subtask1, subtask2");
+
+
+    }
+
     static class Stub {
         public static InMemoryTaskManager getInMemoryTaskManager() {
             return new InMemoryTaskManager();
@@ -169,5 +216,7 @@ class InMemoryTaskManagerTest {
         public static Subtask getSubtask(String name, String description) {
             return new Subtask(name, description);
         }
+        public static String getPrioritizedTasksNoSorted(Subtask subtask1, Subtask subtask2) {return "[Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask2.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T20:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask1.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T22:00}]";}
+        public static String getPrioritizedTasksSorted(Subtask subtask1, Subtask subtask2, Subtask subtask3) {return "[Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask2.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T20:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask3.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T21:00}, Subtask{name='Test add and get Subtask', description='DESCRIPTION', id=" + subtask1.getId() + ", status=NEW, duration=PT0S, startTime=2025-08-17T22:00}]";}
     }
 }
