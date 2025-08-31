@@ -1,0 +1,20 @@
+package ru.yandex.javacourse.model;
+
+public enum EndPoint {
+    GET_TASKS,
+    GET_TASKS_BY_ID,
+    POST_TASKS,
+    DELETE_TASKS,
+    GET_SUBTASKS,
+    GET_SUBTASKS_ID,
+    POST_SUBTASKS,
+    DELETE_SUBTASKS,
+    GET_EPICS,
+    GET_EPICS_ID,
+    GET_EPICS_ID_SUBTASKS,
+    POST_EPICS,
+    DELETE_EPICS_ID,
+    GET_HISTORY,
+    GET_PRIORITIZED,
+    UNKNOWN
+}
