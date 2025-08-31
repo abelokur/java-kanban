@@ -3,7 +3,6 @@ package ru.yandex.javacourse.model;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class BaseHttpHandler {
