@@ -170,7 +170,7 @@ public class HttpTaskServerTest {
 
     static class Stub {
         public static String getAllTaskManagerString() {
-            return "{78=Task{name='NAME7', description='DESCRIPTION7', id=1, status=NEW, duration=PT0S, startTime=null}}";
+            return "{78=Task{name='NAME7', description='DESCRIPTION7', id=78, status=NEW, duration=PT0S, startTime=null}}";
         }
         public static URI getUriTasks () {
             return URI.create("http://localhost:8080/tasks");
