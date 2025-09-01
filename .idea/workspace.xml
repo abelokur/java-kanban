@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d6a00e85-8ed6-4ea0-877c-526715480852" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Epic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Epic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Status.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Subtask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Subtask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager.java" afterDir="false" />
+    <list default="true" id="e5def239-884a-4525-a546-58d7c136bdff" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/ru/yandex/javacourse/model/BaseHttpHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ru/yandex/javacourse/model/EndPoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ru/yandex/javacourse/service/HttpTaskServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ru/yandex/javacourse/service/handler/TasksHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-kanban-3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/java-kanban-3.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +22,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
+        <option value="JUnit5 Test Class" />
         <option value="Enum" />
         <option value="Class" />
       </list>
@@ -30,54 +32,251 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
-  <component name="ProjectId" id="2yGx3uidXdK1UQ5ReSm9DZhybAg" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2yxEHMMpV985JlNVjSPkLKjg1rw" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.HttpTaskServer.executor": "Run",
+    "Application.LoadFromFile.executor": "Run",
     "Application.Main.executor": "Run",
-    "Application.Main1.executor": "Run",
+    "Application.MainFile.executor": "Run",
+    "Application.MainFile1.executor": "Run",
+    "Application.MainFile1_sprint_8.executor": "Run",
+    "Application.MainSprint_8.executor": "Run",
+    "Application.Main_5_1.executor": "Run",
+    "Application.Main_json.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "true",
+    "JUnit.EpicTest.EpicsEqualWithEqualID.executor": "Run",
+    "JUnit.EpicTest.executor": "Run",
+    "JUnit.EpicTest.test_Epics_Equal_With_EqualID.executor": "Run",
+    "JUnit.EpicTest.test_Epics_Statues_DONE.executor": "Run",
+    "JUnit.EpicTest.test_Epics_Statues_IN_PROGRESS.executor": "Run",
+    "JUnit.EpicTest.test_Epics_Statues_NEW.executor": "Run",
+    "JUnit.EpicTest.test_Epics_Statues_NEW_DONE.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_AddEpic_And_GetByIDd.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_AddEpic_None_Actual_Subtasks.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_AddSubtask_And_GetByID.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_AddTask_And_GetByID.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_GetID_And_SetId_DontConflict.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_Setters_Get_Subtask.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_Task_DoesNotChange_After_AddToManager.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_WriteRead_Empty_File.executor": "Run",
+    "JUnit.FileBackedTaskManagerTest.test_WriteRead_TasksEpicsSubtasks.executor": "Run",
+    "JUnit.HttpTaskServerTest.createTask.executor": "Run",
+    "JUnit.HttpTaskServerTest.executor": "Run",
+    "JUnit.HttpTaskServerTest.test_Create_Task.executor": "Run",
+    "JUnit.HttpTaskServerTest.test_Get_All_Task.executor": "Run",
+    "JUnit.HttpTaskServerTest.test_Get_Task.executor": "Run",
+    "JUnit.HttpTaskServerTest.test_Update_Task.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.saveInHistory.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Get_Default_History_Is_Empty.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Get_Duplicate.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Get_Duplicate_Begin.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Get_Duplicate_End.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Get_Duplicate_Middle.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History_One_Task_Previous_Remove.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History_Previous_Remove.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History_Previous_Remove_.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History_Previous_Remove_1.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History_Previous_Remove_Head.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History_Previous_Remove_Tail.executor": "Run",
+    "JUnit.InMemoryHistoryManagerTest.test_Save_In_History_Unlimited_Quantity_Tasks.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.addEpicAndGetByIDd.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.addSubtaskAndGetByID.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.addTask.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.getIdAnSetIdDontConflict.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.taskDoesNotChangeAfterAddToManager.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_AddEpic_And_GetByIDd.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_AddEpic_None_Actual_Subtasks.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_AddSubtask_And_GetByID.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_AddTask_And_GetByID.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_GetID_And_SetId_DontConflict.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_Get_Prioritized_Tasks.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_Setters_Get_Subtask.executor": "Run",
+    "JUnit.InMemoryTaskManagerTest.test_Task_DoesNotChange_After_AddToManager.executor": "Run",
+    "JUnit.ManagersTest.executor": "Run",
+    "JUnit.ManagersTest.getDefault.executor": "Run",
+    "JUnit.ManagersTest.test_GetDefault.executor": "Run",
+    "JUnit.ManagersTest.test_Get_Default.executor": "Run",
+    "JUnit.SubtaskTest.SubTasksEqualWithEqualID.executor": "Run",
+    "JUnit.SubtaskTest.executor": "Run",
+    "JUnit.TaskManagerTest.executor": "Run",
+    "JUnit.TaskManagerTest.test_AddTask_And_GetByID.executor": "Run",
+    "JUnit.TaskManagerTest.test_AddTask_And_GetByID_.executor": "Run",
+    "JUnit.TaskTest.EpicsEqualWithEqualID.executor": "Run",
+    "JUnit.TaskTest.SubTasksEqualWithEqualID.executor": "Run",
+    "JUnit.TaskTest.TasksEqualWithEqualID.executor": "Run",
+    "JUnit.TaskTest.executor": "Run",
+    "JUnit.TaskTest.test_Tasks_Equal_With_EqualID.executor": "Run",
+    "JUnit.TaskTest.test_Tasks_Is_Not_Overlapping.executor": "Run",
+    "JUnit.TaskTest.test_Tasks_Is_Overlapping.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main"
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "create.test.in.the.same.root": "true",
+    "git-widget-placeholder": "sprint__9-solution-http-api",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="java-kanban" />
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="ru.yandex.javacourse.service" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="ru.yandex.javacourse.service" />
+      <recent name="ru.yandex.javacourse.model" />
+      <recent name="ru.yandex.javacourse" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.HttpTaskServer">
+    <configuration name="HttpTaskServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.yandex.javacourse.service.HttpTaskServer" />
+      <module name="java-kanban-3" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.yandex.javacourse.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main1" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main1" />
-      <module name="java-kanban" />
+    <configuration name="HttpTaskServerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-kanban-3" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.yandex.javacourse.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.yandex.javacourse.service" />
+      <option name="MAIN_CLASS_NAME" value="ru.yandex.javacourse.service.HttpTaskServerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HttpTaskServerTest.test_Get_All_Task" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-kanban-3" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.yandex.javacourse.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.yandex.javacourse.service" />
+      <option name="MAIN_CLASS_NAME" value="ru.yandex.javacourse.service.HttpTaskServerTest" />
+      <option name="METHOD_NAME" value="test_Get_All_Task" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HttpTaskServerTest.test_Get_Task" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-kanban-3" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.yandex.javacourse.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.yandex.javacourse.service" />
+      <option name="MAIN_CLASS_NAME" value="ru.yandex.javacourse.service.HttpTaskServerTest" />
+      <option name="METHOD_NAME" value="test_Get_Task" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HttpTaskServerTest.test_Update_Task" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-kanban-3" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.yandex.javacourse.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.yandex.javacourse.service" />
+      <option name="MAIN_CLASS_NAME" value="ru.yandex.javacourse.service.HttpTaskServerTest" />
+      <option name="METHOD_NAME" value="test_Update_Task" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main1" />
+        <item itemvalue="Application.HttpTaskServer" />
+        <item itemvalue="JUnit.HttpTaskServerTest" />
+        <item itemvalue="JUnit.HttpTaskServerTest.test_Get_Task" />
+        <item itemvalue="JUnit.HttpTaskServerTest.test_Get_All_Task" />
+        <item itemvalue="JUnit.HttpTaskServerTest.test_Update_Task" />
       </list>
     </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d6a00e85-8ed6-4ea0-877c-526715480852" name="Changes" comment="" />
-      <created>1749474517533</created>
+      <changelist id="e5def239-884a-4525-a546-58d7c136bdff" name="Changes" comment="" />
+      <created>1750767737345</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1749474517533</updated>
+      <updated>1750767737345</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="77c4bbef-f934-46b0-a2f4-d89c56360576" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="77c4bbef-f934-46b0-a2f4-d89c56360576">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="sprint_6-solution" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
