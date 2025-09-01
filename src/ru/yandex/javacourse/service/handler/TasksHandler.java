@@ -11,21 +11,12 @@ import ru.yandex.javacourse.service.InMemoryTaskManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static ru.yandex.javacourse.model.EndPoint.*;
 
 public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 
     private final InMemoryTaskManager taskManager;
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .setPrettyPrinting()
-            .serializeNulls()
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create();
 
     public TasksHandler(InMemoryTaskManager taskManager) {
         this.taskManager = taskManager;
@@ -47,7 +38,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                 try {
                     sendText(httpExchange, gson.toJson(taskManager.getTask(Integer.parseInt(splitPath[2]))), 200);
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "Task c id: " + splitPath[2] + " не существует", 404);
+                    sendNotFound(httpExchange, "Task c id: " + splitPath[2] + " не существует");
                 }
                 break;
             case POST_TASKS:
@@ -70,12 +61,12 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                             taskManager.updateTask(updatedTask);
                             sendText(httpExchange, "Task с id: " + updatedTask.getId() + " успешно обновлена " + gson.toJson(taskManager.getTask(updatedTask.getId())), 201);
                         } catch (RuntimeException e) {
-                            sendText(httpExchange, "Task c id: " + splitPath[2] + " не существует", 404);
+                            sendNotFound(httpExchange, "Task c id: " + splitPath[2] + " не существует");
                         }
                     }
 
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "При создании Task произошла ошибка " + e.getMessage(), 404);
+                    sendServerError(httpExchange, e.getMessage());
                 }
                 break;
             case DELETE_TASKS:
@@ -83,7 +74,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                     taskManager.removeTask(Integer.parseInt(splitPath[2]));
                     sendText(httpExchange, "Task с id: " + splitPath[2] + " удалена", 200);
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "Task c id: " + splitPath[2] + " не существует", 404);
+                    sendNotFound(httpExchange, "Task c id: " + splitPath[2] + " не существует");
                 }
                 break;
             case UNKNOWN:

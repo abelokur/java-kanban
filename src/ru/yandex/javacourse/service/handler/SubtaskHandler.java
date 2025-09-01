@@ -11,20 +11,11 @@ import ru.yandex.javacourse.service.InMemoryTaskManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static ru.yandex.javacourse.model.EndPoint.*;
 
 public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     private final InMemoryTaskManager taskManager;
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .setPrettyPrinting()
-            .serializeNulls()
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create();
 
     public SubtaskHandler(InMemoryTaskManager taskManager) {
         this.taskManager = taskManager;
@@ -46,7 +37,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                 try {
                     sendText(httpExchange, gson.toJson(taskManager.getSubtask(Integer.parseInt(splitPath[2]))), 200);
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "Subtask c id: " + splitPath[2] + " не существует", 404);
+                    sendNotFound(httpExchange, "Subtask c id: " + splitPath[2] + " не существует");
                 }
                 break;
             case POST_SUBTASKS:
@@ -71,12 +62,12 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                             taskManager.updateSubtask(updatedSubtask);
                             sendText(httpExchange, "Subtask с id: " + updatedSubtask.getId() + " успешно обновлена " + gson.toJson(taskManager.getSubtask(updatedSubtask.getId())), 201);
                         } catch (RuntimeException e) {
-                            sendText(httpExchange, "Subtask c id: " + splitPath[2] + " не существует", 404);
+                            sendNotFound(httpExchange, "Subtask c id: " + splitPath[2] + " не существует");
                         }
 
                     }
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "При создании Subtask произошла ошибка " + e.getMessage(), 404);
+                    sendServerError(httpExchange, e.getMessage());
                 }
                 break;
             case DELETE_SUBTASKS:
@@ -84,7 +75,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                     taskManager.removeSubtask(Integer.parseInt(splitPath[2]));
                     sendText(httpExchange, "Subtask с id: " + splitPath[2] + " удалена", 200);
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "Subtask c id: " + splitPath[2] + " не существует", 404);
+                    sendNotFound(httpExchange, "Subtask c id: " + splitPath[2] + " не существует");
                 }
                 break;
             case UNKNOWN:

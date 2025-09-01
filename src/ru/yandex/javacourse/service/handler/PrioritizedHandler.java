@@ -1,7 +1,5 @@
 package ru.yandex.javacourse.service.handler;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.yandex.javacourse.model.BaseHttpHandler;
@@ -9,20 +7,11 @@ import ru.yandex.javacourse.model.EndPoint;
 import ru.yandex.javacourse.service.InMemoryTaskManager;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static ru.yandex.javacourse.model.EndPoint.*;
 
 public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
     private final InMemoryTaskManager taskManager;
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .setPrettyPrinting()
-            .serializeNulls()
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create();
 
     public PrioritizedHandler(InMemoryTaskManager taskManager) {
         this.taskManager = taskManager;

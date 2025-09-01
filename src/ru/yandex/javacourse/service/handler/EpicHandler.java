@@ -11,20 +11,11 @@ import ru.yandex.javacourse.service.InMemoryTaskManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static ru.yandex.javacourse.model.EndPoint.*;
 
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     private final InMemoryTaskManager taskManager;
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .setPrettyPrinting()
-            .serializeNulls()
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create();
 
     public EpicHandler(InMemoryTaskManager taskManager) {
         this.taskManager = taskManager;
@@ -46,7 +37,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 try {
                     sendText(httpExchange, gson.toJson(taskManager.getEpic(Integer.parseInt(splitPath[2]))), 200);
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "Epic c id: " + splitPath[2] + " не существует", 404);
+                    sendNotFound(httpExchange, "Epic c id: " + splitPath[2] + " не существует");
                 }
                 break;
             case GET_EPICS_ID_SUBTASKS:
@@ -54,7 +45,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     Epic epic = taskManager.getEpic(Integer.parseInt(splitPath[2]));
                     sendText(httpExchange, gson.toJson(epic.getSubTaskList()), 200);
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "Epic c id: " + splitPath[2] + " не существует", 404);
+                    sendNotFound(httpExchange, "Epic c id: " + splitPath[2] + " не существует");
                 }
                 break;
             case POST_EPICS:
@@ -78,12 +69,12 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                         taskManager.updateEpic(updatedEpic);
                         sendText(httpExchange, "Epic с id: " + updatedEpic.getId() + " успешно обновлена " + gson.toJson(taskManager.getEpic(updatedEpic.getId())), 201);
                     } catch (RuntimeException e) {
-                        sendText(httpExchange, "Epic c id: " + splitPath[2] + " не существует", 404);
+                        sendNotFound(httpExchange, "Epic c id: " + splitPath[2] + " не существует");
                     }
 
                 }
                 } catch (RuntimeException e) {
-                    sendText(httpExchange, "При создании Epic произошла ошибка " + e.getMessage(), 404);
+                    sendServerError(httpExchange, e.getMessage());
                 }
                 break;
             case DELETE_EPICS_ID:
